@@ -12,6 +12,7 @@ interface AuthButtonProps {
 
 const AuthButton: React.FC<AuthButtonProps> = ({ user, onAuthChange }) => {
   const handleSignIn = async () => {
+    if (!auth) { console.warn('Firebase auth not configured'); return; }
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
@@ -22,6 +23,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({ user, onAuthChange }) => {
   };
 
   const handleSignOut = async () => {
+    if (!auth) return;
     try {
       await signOut(auth);
       onAuthChange(null);

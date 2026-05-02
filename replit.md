@@ -15,7 +15,7 @@ SaaS de automatización de ventas y CRM con IA. Plataforma multi-tenant con aute
 - **Backend**: Express.js + TypeScript + Drizzle ORM.
 - **DB**: PostgreSQL en NeonDB.
 - **Auth**: Firebase Auth (cliente) + Firebase Admin (servidor) — middleware `requireAuth` + `loadCurrentUser` resuelve `req.dbUser`.
-- **IA**: Firebase AI Logic en cliente + Google Vertex AI / Gemini en servidor (fallback híbrido).
+- **IA**: Google Vertex AI / Gemini en servidor via `/api/ai/*`. Cliente llama directamente al backend (Firebase AI Logic eliminado — era un bypass con credenciales hardcodeadas).
 - **Pagos**: Stripe live (`acct_1OFjtMLyFdxK9hC8` Edgar Roche), 3 planes (`basic`, `pro`, `elite`) con intervalos `month`/`year`, billing portal.
 - **Orquestación**: n8n opcional (avisa si no hay API key).
 - **Servicios Google**: Translate API, Text-to-Speech.

@@ -92,7 +92,7 @@ const Pricing = () => {
   });
 
   const handleSubscribe = (code: PlanCode) => {
-    if (!auth.currentUser) {
+    if (!auth?.currentUser) {
       toast({
         title: "Sign in required",
         description: "Please log in before subscribing to a plan.",

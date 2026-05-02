@@ -876,6 +876,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // n8n Integration Routes
+
+  // Returns the n8n base URL so the frontend can build direct links (never exposes the API key)
+  app.get("/api/n8n/config", (_req, res) => {
+    const apiUrl = process.env.N8N_API_URL || "";
+    // Strip /api/v1 suffix to get the UI base URL
+    const baseUrl = apiUrl.replace(/\/api\/v1\/?$/, "").replace(/\/+$/, "") || null;
+    res.json({ baseUrl });
+  });
+
   app.get("/api/n8n/workflows", async (req, res) => {
     try {
       const workflows = await n8nService.getWorkflows();

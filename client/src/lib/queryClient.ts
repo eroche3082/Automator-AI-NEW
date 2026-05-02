@@ -3,7 +3,7 @@ import { auth } from "./firebase";
 
 async function getAuthHeaders(): Promise<Record<string, string>> {
   try {
-    const user = auth.currentUser;
+    const user = auth?.currentUser;
     if (user) {
       const token = await user.getIdToken();
       return { Authorization: `Bearer ${token}` };

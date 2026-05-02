@@ -1,45 +1,34 @@
-
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getPlanByCode, canAccessFeature, checkLimit, type MembershipPlan } from "@shared/membership";
 
-interface UserMembership {
-  plan: "basic" | "pro" | "elite";
-  status: "active" | "cancelled" | "expired";
-  expiresAt?: Date;
-}
-
 export function useMembership() {
-  // TODO: Replace with actual user data from auth/API
-  const [membership, setMembership] = useState<UserMembership>({
-    plan: "basic", // Default to basic for now
-    status: "active"
+  const { data: profile } = useQuery<{ plan?: string; subscriptionStatus?: string }>({
+    queryKey: ["/api/me"],
   });
 
-  const currentPlan = getPlanByCode(membership.plan);
+  const planCode = (profile?.plan as "basic" | "pro" | "elite") || "basic";
+  const currentPlan = getPlanByCode(planCode);
 
   const hasFeature = (feature: string): boolean => {
-    return canAccessFeature(membership.plan, feature);
+    return canAccessFeature(planCode, feature);
   };
 
   const isWithinLimit = (limitType: keyof MembershipPlan["limits"], current: number): boolean => {
-    return checkLimit(membership.plan, limitType, current);
+    return checkLimit(planCode, limitType, current);
   };
 
   const upgradeRequired = (feature: string): boolean => {
     return !hasFeature(feature);
   };
 
-  // Simulate plan changes for testing
-  const changePlan = (newPlan: "basic" | "pro" | "elite") => {
-    setMembership(prev => ({ ...prev, plan: newPlan }));
-  };
-
   return {
-    membership,
+    membership: {
+      plan: planCode,
+      status: (profile?.subscriptionStatus as "active" | "cancelled" | "expired") || "active",
+    },
     currentPlan,
     hasFeature,
     isWithinLimit,
     upgradeRequired,
-    changePlan // For testing only
   };
 }

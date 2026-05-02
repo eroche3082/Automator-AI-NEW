@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useN8nWorkflows, useDeleteN8nWorkflow, useActivateN8nWorkflow, useDeactivateN8nWorkflow } from "@/hooks/use-n8n-workflows";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,8 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TranslatedText } from "@/components/ui/translated-text";
 import { AlertCircle, Check, ExternalLink, Play, Square, Trash } from "lucide-react";
 import { N8nWorkflow } from "@/lib/types";
-import { queryClient } from "@/lib/queryClient";
-import { useQueryClient } from "@tanstack/react-query";
 import { 
   Dialog,
   DialogContent,
@@ -32,53 +31,15 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-// Componente de diálogo para configurar n8n
+function useN8nConfig() {
+  return useQuery<{ baseUrl: string | null }>({
+    queryKey: ["/api/n8n/config"],
+    staleTime: Infinity,
+  });
+}
+
 const SetupN8nDialog: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [url, setUrl] = useState("http://localhost:5678");
-  const [apiKey, setApiKey] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
-
-  const handleSave = async () => {
-    if (!url || !apiKey) {
-      toast({
-        title: "Error",
-        description: "Please provide both URL and API key",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSaving(true);
-    try {
-      // En una implementación real, esto se enviaría al backend para almacenar la configuración
-      // Por ahora simularemos que se guardó correctamente
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Simular que estamos estableciendo las variables de entorno (en una implementación real)
-      console.log("Saving n8n configuration:", { url, apiKey: "***" });
-      
-      toast({
-        title: "Configuration saved",
-        description: "The n8n configuration has been saved successfully.",
-      });
-      
-      // Invalidar las consultas relacionadas con n8n para forzar una recarga
-      queryClient.invalidateQueries({ queryKey: ['/api/n8n/workflows'] });
-      
-      setOpen(false);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to save configuration. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -93,52 +54,22 @@ const SetupN8nDialog: React.FC = () => {
             <TranslatedText text="n8n Configuration" />
           </DialogTitle>
           <DialogDescription>
-            <TranslatedText text="Configure the connection to your n8n instance. You need an n8n API key to connect to your n8n server." />
+            <TranslatedText text="To connect to your n8n instance, set the following environment variables on the server and restart the application." />
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <label htmlFor="n8n-url" className="text-sm font-medium">
-              <TranslatedText text="n8n URL" />
-            </label>
-            <input
-              id="n8n-url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              className="w-full p-2 border border-gray-700 bg-gray-800 rounded text-white"
-              placeholder="http://localhost:5678"
-            />
-            <p className="text-xs text-gray-400">
-              <TranslatedText text="The URL where your n8n instance is running, including http/https" />
-            </p>
+        <div className="space-y-4 py-4 text-sm text-gray-300">
+          <div className="bg-gray-800 rounded p-3 font-mono text-xs space-y-1">
+            <p><span className="text-blue-400">N8N_API_URL</span>=https://your-n8n-instance/api/v1</p>
+            <p><span className="text-blue-400">N8N_API_KEY</span>=your-n8n-api-key</p>
           </div>
-          <div className="space-y-2">
-            <label htmlFor="n8n-api-key" className="text-sm font-medium">
-              <TranslatedText text="n8n API Key" />
-            </label>
-            <input
-              id="n8n-api-key"
-              type="password"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              className="w-full p-2 border border-gray-700 bg-gray-800 rounded text-white"
-              placeholder="Enter your n8n API key"
-            />
-            <p className="text-xs text-gray-400">
-              <TranslatedText text="You can find or create your API key in the n8n settings under 'API' tab" />
-            </p>
-          </div>
+          <p className="text-gray-400 text-xs">
+            You can find or create your n8n API key in the n8n settings under the &quot;API&quot; tab.
+            The URL should point to your self-hosted or cloud n8n instance.
+          </p>
         </div>
         <DialogFooter>
-          <Button onClick={handleSave} disabled={isSaving}>
-            {isSaving ? (
-              <>
-                <span className="animate-spin mr-2">⏳</span>
-                <TranslatedText text="Saving..." />
-              </>
-            ) : (
-              <TranslatedText text="Save Configuration" />
-            )}
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            <TranslatedText text="Close" />
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -146,8 +77,7 @@ const SetupN8nDialog: React.FC = () => {
   );
 };
 
-// Componente de tarjeta de workflow
-const WorkflowCard: React.FC<{ workflow: N8nWorkflow; onDelete: () => void }> = ({ workflow, onDelete }) => {
+const WorkflowCard: React.FC<{ workflow: N8nWorkflow; n8nBaseUrl: string | null; onDelete: () => void }> = ({ workflow, n8nBaseUrl, onDelete }) => {
   const activateWorkflow = useActivateN8nWorkflow(workflow.id);
   const deactivateWorkflow = useDeactivateN8nWorkflow(workflow.id);
   const { toast } = useToast();
@@ -156,16 +86,10 @@ const WorkflowCard: React.FC<{ workflow: N8nWorkflow; onDelete: () => void }> = 
     try {
       if (workflow.active) {
         await deactivateWorkflow.mutateAsync();
-        toast({
-          title: "Workflow deactivated",
-          description: "The workflow has been deactivated successfully",
-        });
+        toast({ title: "Workflow deactivated", description: "The workflow has been deactivated successfully" });
       } else {
         await activateWorkflow.mutateAsync();
-        toast({
-          title: "Workflow activated",
-          description: "The workflow has been activated successfully",
-        });
+        toast({ title: "Workflow activated", description: "The workflow has been activated successfully" });
       }
     } catch (error) {
       toast({
@@ -175,6 +99,8 @@ const WorkflowCard: React.FC<{ workflow: N8nWorkflow; onDelete: () => void }> = 
       });
     }
   };
+
+  const editUrl = n8nBaseUrl ? `${n8nBaseUrl}/workflow/${workflow.id}` : null;
 
   return (
     <Card className="w-full">
@@ -190,9 +116,7 @@ const WorkflowCard: React.FC<{ workflow: N8nWorkflow; onDelete: () => void }> = 
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-sm">
-          {`Nodes: ${workflow.nodes?.length || 0}`}
-        </p>
+        <p className="text-sm">{`Nodes: ${workflow.nodes?.length || 0}`}</p>
       </CardContent>
       <CardFooter className="justify-between">
         <div className="flex gap-2">
@@ -228,24 +152,23 @@ const WorkflowCard: React.FC<{ workflow: N8nWorkflow; onDelete: () => void }> = 
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>
-                  <TranslatedText text="Cancel" />
-                </AlertDialogCancel>
-                <AlertDialogAction onClick={onDelete}>
-                  <TranslatedText text="Delete" />
-                </AlertDialogAction>
+                <AlertDialogCancel><TranslatedText text="Cancel" /></AlertDialogCancel>
+                <AlertDialogAction onClick={onDelete}><TranslatedText text="Delete" /></AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        <Button 
-          size="sm" 
-          variant="secondary"
-          onClick={() => window.open(`http://localhost:5678/workflow/${workflow.id}`, "_blank")}
-        >
-          <ExternalLink className="h-4 w-4 mr-2" />
-          <TranslatedText text="Edit" />
-        </Button>
+        {editUrl ? (
+          <Button size="sm" variant="secondary" onClick={() => window.open(editUrl, "_blank")}>
+            <ExternalLink className="h-4 w-4 mr-2" />
+            <TranslatedText text="Edit" />
+          </Button>
+        ) : (
+          <Button size="sm" variant="secondary" disabled title="Configure n8n URL to enable editing">
+            <ExternalLink className="h-4 w-4 mr-2" />
+            <TranslatedText text="Edit" />
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );
@@ -253,27 +176,24 @@ const WorkflowCard: React.FC<{ workflow: N8nWorkflow; onDelete: () => void }> = 
 
 const N8nIntegrationPage: React.FC = () => {
   const { data: workflows = [] as N8nWorkflow[], isLoading, error } = useN8nWorkflows();
+  const { data: n8nConfig } = useN8nConfig();
   const deleteWorkflow = useDeleteN8nWorkflow();
   const { toast } = useToast();
-  const [n8nUrl] = useState("http://localhost:5678");
+
+  const n8nBaseUrl = n8nConfig?.baseUrl ?? null;
 
   const handleOpenN8n = () => {
-    window.open(n8nUrl, "_blank");
+    if (n8nBaseUrl) {
+      window.open(n8nBaseUrl, "_blank");
+    }
   };
 
   const handleDeleteWorkflow = async (id: string) => {
     try {
       await deleteWorkflow.mutateAsync(id);
-      toast({
-        title: "Workflow deleted",
-        description: "The workflow has been deleted successfully",
-      });
+      toast({ title: "Workflow deleted", description: "The workflow has been deleted successfully" });
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete workflow",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to delete workflow", variant: "destructive" });
     }
   };
 
@@ -345,21 +265,19 @@ const N8nIntegrationPage: React.FC = () => {
         </h1>
         <div className="flex gap-2">
           <SetupN8nDialog />
-          <Button onClick={handleOpenN8n} variant="outline">
-            <ExternalLink className="h-4 w-4 mr-2" />
-            <TranslatedText text="Open n8n Interface" />
-          </Button>
+          {n8nBaseUrl && (
+            <Button onClick={handleOpenN8n} variant="outline">
+              <ExternalLink className="h-4 w-4 mr-2" />
+              <TranslatedText text="Open n8n Interface" />
+            </Button>
+          )}
         </div>
       </div>
 
       <Tabs defaultValue="workflows">
         <TabsList>
-          <TabsTrigger value="workflows">
-            <TranslatedText text="Workflows" />
-          </TabsTrigger>
-          <TabsTrigger value="integrations">
-            <TranslatedText text="Integrations" />
-          </TabsTrigger>
+          <TabsTrigger value="workflows"><TranslatedText text="Workflows" /></TabsTrigger>
+          <TabsTrigger value="integrations"><TranslatedText text="Integrations" /></TabsTrigger>
         </TabsList>
         <TabsContent value="workflows" className="py-4">
           {workflows && workflows.length > 0 ? (
@@ -367,7 +285,8 @@ const N8nIntegrationPage: React.FC = () => {
               {workflows.map((workflow: N8nWorkflow) => (
                 <WorkflowCard 
                   key={workflow.id} 
-                  workflow={workflow} 
+                  workflow={workflow}
+                  n8nBaseUrl={n8nBaseUrl}
                   onDelete={() => handleDeleteWorkflow(workflow.id)} 
                 />
               ))}
@@ -375,9 +294,7 @@ const N8nIntegrationPage: React.FC = () => {
           ) : (
             <Card>
               <CardHeader>
-                <CardTitle>
-                  <TranslatedText text="No workflows found" />
-                </CardTitle>
+                <CardTitle><TranslatedText text="No workflows found" /></CardTitle>
                 <CardDescription>
                   <TranslatedText text="You don't have any n8n workflows configured yet." />
                 </CardDescription>
@@ -385,21 +302,21 @@ const N8nIntegrationPage: React.FC = () => {
               <CardContent>
                 <TranslatedText text="Create your first workflow in n8n to get started. Once created, it will appear here and you can manage it through the AUTOMATOR AI interface." />
               </CardContent>
-              <CardFooter>
-                <Button onClick={handleOpenN8n}>
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  <TranslatedText text="Open n8n to create workflows" />
-                </Button>
-              </CardFooter>
+              {n8nBaseUrl && (
+                <CardFooter>
+                  <Button onClick={handleOpenN8n}>
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    <TranslatedText text="Open n8n to create workflows" />
+                  </Button>
+                </CardFooter>
+              )}
             </Card>
           )}
         </TabsContent>
         <TabsContent value="integrations" className="py-4">
           <Card>
             <CardHeader>
-              <CardTitle>
-                <TranslatedText text="Available Integrations" />
-              </CardTitle>
+              <CardTitle><TranslatedText text="Available Integrations" /></CardTitle>
               <CardDescription>
                 <TranslatedText text="n8n provides hundreds of integrations with popular services and tools." />
               </CardDescription>
@@ -420,12 +337,14 @@ const N8nIntegrationPage: React.FC = () => {
                 ))}
               </ul>
             </CardContent>
-            <CardFooter>
-              <Button onClick={handleOpenN8n}>
-                <ExternalLink className="h-4 w-4 mr-2" />
-                <TranslatedText text="Browse all n8n nodes" />
-              </Button>
-            </CardFooter>
+            {n8nBaseUrl && (
+              <CardFooter>
+                <Button onClick={handleOpenN8n}>
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  <TranslatedText text="Browse all n8n nodes" />
+                </Button>
+              </CardFooter>
+            )}
           </Card>
         </TabsContent>
       </Tabs>

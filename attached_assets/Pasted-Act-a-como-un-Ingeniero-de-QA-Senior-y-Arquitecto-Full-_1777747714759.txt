@@ -1,0 +1,25 @@
+Actúa como un Ingeniero de QA Senior y Arquitecto Full-Stack. Necesito que realices una auditoría exhaustiva, estática y dinámica, de todo este espacio de trabajo (workspace). Tu objetivo es verificar cada módulo, botón, pestaña, endpoint y característica del sistema, garantizando que estemos usando la API real y no datos de prueba (mock data).
+
+Ejecuta esta auditoría siguiendo estrictamente estos pasos y entrégame el reporte final:
+
+PASO 1: MAPEO Y CRUCE DE RUTAS (FRONTEND VS BACKEND)
+- Analiza todo el código fuente del Frontend para extraer cada llamada a la API (busca usos de axios, fetch, llamadas a servicios, etc., tanto métodos GET, POST, PUT, DELETE).
+- Analiza todo el código fuente del Backend (rutas, controladores) para extraer la lista exacta y real de endpoints habilitados.
+- Cruza ambas listas. Identifica críticamente cualquier URL invocada por el frontend que NO exista en el backend. 
+- Nota importante: Presta especial atención al problema del SPA. Muchos endpoints pueden estar devolviendo el 'index.html' por defecto en lugar de un error 404 o la respuesta JSON correcta. Marca estos como FAIL.
+
+PASO 2: AUDITORÍA DE ELEMENTOS INTERACTIVOS (UI)
+- Analiza los componentes de la interfaz de usuario.
+- Lista todos los botones, enlaces (links), pestañas (tabs), sub-pestañas y formularios.
+- Verifica en el código si estos elementos tienen eventos asignados (ej. onClick, onSubmit) y si esos eventos están conectados a funciones que realmente existen y ejecutan una acción.
+
+PASO 3: REPORTE COMPLETO DE ESTADO (PASS / FAIL)
+Genera una lista exhaustiva agrupada por Módulos. Para cada elemento evaluado (Endpoint, Botón, Tab, Feature), asigna un estado:
+- PASS: El código frontend llama a una ruta que sí existe en el backend, o el botón tiene una función correctamente implementada.
+- FAIL: Ruta muerta, devuelve HTML del SPA, botón sin acción, usa mock data, o enlace roto.
+- PENDING: Requiere implementación desde cero.
+
+PASO 4: PLAN DE IMPLEMENTACIÓN EN 10 FASES
+A partir de todos los hallazgos con estado FAIL o PENDING, diseña un plan de desarrollo secuencial dividido exactamente en 10 fases. Organiza las fases desde los problemas más críticos (como arreglar las rutas muertas de la API y eliminar los mocks) hasta los detalles de interfaz de usuario. 
+
+Entrégame la respuesta con el reporte completo y detallado, seguido del plan de 10 fases. Por favor, no omitas ningún archivo o componente del proyecto.

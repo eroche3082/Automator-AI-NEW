@@ -99,6 +99,8 @@ const Settings = () => {
     leadNotifications: true,
     calendarReminders: true,
     marketingUpdates: false,
+    browserNotifications: true,
+    discordNotifications: false,
     twoFactorAuth: false,
     selectedTheme: theme,
   });
@@ -176,7 +178,7 @@ const Settings = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      if (auth) await signOut(auth);
       queryClient.clear();
       toast({ title: "Signed out" });
     } catch (err: any) {
@@ -185,38 +187,9 @@ const Settings = () => {
   };
 
 
-  const integrations = [
-    {
-      name: "Google API",
-      status: "connected",
-      description: "Calendar, Gmail, Docs, and Sheets",
-      lastSync: "5 min ago"
-    },
-    {
-      name: "Stripe",
-      status: "connected",
-      description: "Payment processing and subscription management",
-      lastSync: "1 hour ago"
-    },
-    {
-      name: "Zapier",
-      status: "connected",
-      description: "Connect with 3,000+ apps",
-      lastSync: "30 min ago"
-    },
-    {
-      name: "Discord",
-      status: "connected",
-      description: "Team communication and notifications",
-      lastSync: "15 min ago"
-    },
-    {
-      name: "Calendly",
-      status: "disconnected",
-      description: "Scheduling automation",
-      lastSync: "Never"
-    }
-  ];
+  const { data: integrationsData = [] } = useQuery<{ id: number; name: string; icon: string; status: string; lastSync: string | null }[]>({
+    queryKey: ["/api/integrations"],
+  });
 
   return (
     <>
@@ -395,8 +368,13 @@ const Settings = () => {
                       <div className="bg-gray-800/50 p-4 rounded-lg">
                         <div className="flex justify-between items-center">
                           <div>
-                            <h5 className="font-medium text-[#E6E8EC]">Pro Plan</h5>
-                            <p className="text-sm text-gray-400 mt-1">$49/month, billed monthly</p>
+                            <h5 className="font-medium text-[#E6E8EC]">{currentPlan?.name || "Free"} Plan</h5>
+                            {currentPlan?.monthly != null && currentPlan.monthly > 0 && (
+                              <p className="text-sm text-gray-400 mt-1">${(currentPlan.monthly / 100).toFixed(0)}/month</p>
+                            )}
+                            {membership.status && (
+                              <p className="text-xs text-gray-500 mt-1 capitalize">Status: {membership.status}</p>
+                            )}
                           </div>
                           <Button
                             className="gradient-btn"
@@ -406,9 +384,6 @@ const Settings = () => {
                           >
                             {openBillingPortal.isPending ? "Loading..." : "Manage Plan"}
                           </Button>
-                        </div>
-                        <div className="mt-4 pt-4 border-t border-gray-700">
-                          <p className="text-sm text-gray-400">Next billing date: July 15, 2023</p>
                         </div>
                       </div>
                     </div>
@@ -503,7 +478,7 @@ const Settings = () => {
                               <p className="text-xs text-gray-400">Real-time alerts in your browser</p>
                             </div>
                           </div>
-                          <Switch defaultChecked />
+                          <Switch checked={formData.browserNotifications} onCheckedChange={(checked) => setFormData({...formData, browserNotifications: checked})} />
                         </div>
 
                         <div className="flex items-center justify-between">
@@ -516,7 +491,7 @@ const Settings = () => {
                               <p className="text-xs text-gray-400">Send alerts to Discord channels</p>
                             </div>
                           </div>
-                          <Switch defaultChecked />
+                          <Switch checked={formData.discordNotifications} onCheckedChange={(checked) => setFormData({...formData, discordNotifications: checked})} />
                         </div>
                       </div>
                     </div>
@@ -595,8 +570,10 @@ const Settings = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    {integrations.map((integration, index) => (
-                      <div key={index} className="bg-gray-800/50 p-4 rounded-lg">
+                    {integrationsData.length === 0 ? (
+                      <p className="text-sm text-gray-400">No integrations configured yet.</p>
+                    ) : integrationsData.map((integration) => (
+                      <div key={integration.id} className="bg-gray-800/50 p-4 rounded-lg">
                         <div className="flex justify-between items-center">
                           <div className="flex items-center">
                             <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center mr-3">
@@ -608,7 +585,9 @@ const Settings = () => {
                                 {integration.status === "connected" ? (
                                   <>
                                     <Check className="w-3 h-3 text-green-500 mr-1" />
-                                    <span className="text-xs text-gray-400">Connected • Last sync: {integration.lastSync}</span>
+                                    <span className="text-xs text-gray-400">
+                                      Connected{integration.lastSync ? ` • Last sync: ${new Date(integration.lastSync).toLocaleString()}` : ""}
+                                    </span>
                                   </>
                                 ) : (
                                   <>
@@ -617,7 +596,6 @@ const Settings = () => {
                                   </>
                                 )}
                               </div>
-                              <p className="text-xs text-gray-400 mt-1">{integration.description}</p>
                             </div>
                           </div>
                           <WouterLink href="/connections">
