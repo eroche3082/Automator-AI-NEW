@@ -1,0 +1,349 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2820
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Act\'faa como un **Principal Engineer + Systems Architect + Product Lead + DevOps + QA Auditor + Technical Writer de nivel FAANG**.\
+\
+Tu misi\'f3n es generar una **\'93BIBLIA COMPLETA DE ESTA APP\'94**, que documente absolutamente todo lo necesario para entender, auditar, escalar, monetizar y llevar a producci\'f3n esta aplicaci\'f3n.\
+\
+No quiero un resumen.\
+Quiero un documento profundo, estructurado, t\'e9cnico y accionable.\
+\
+---\
+\
+# 1. VISI\'d3N GENERAL DE LA APP\
+\
+* Nombre de la app\
+* Prop\'f3sito principal\
+* Problema que resuelve\
+* Tipo de producto (SaaS, marketplace, AI tool, etc.)\
+* Usuario objetivo\
+* Casos de uso principales\
+* Valor diferencial\
+\
+---\
+\
+# 2. ARQUITECTURA GENERAL\
+\
+Describe claramente:\
+\
+* Frontend (framework, estructura)\
+* Backend (framework, arquitectura)\
+* Base de datos (tipo, modelos)\
+* APIs internas\
+* APIs externas\
+* Infraestructura (hosting, CDN, edge)\
+* Flujo general del sistema\
+\
+Incluye diagrama textual:\
+\
+User \uc0\u8594  Frontend \u8594  Backend \u8594  APIs \u8594  DB \u8594  Response\
+\
+---\
+\
+# 3. INVENTARIO COMPLETO DEL SISTEMA\
+\
+Lista TODO lo que existe:\
+\
+### Frontend\
+\
+* p\'e1ginas\
+* componentes\
+* layouts\
+* dashboards\
+* formularios\
+\
+### Backend\
+\
+* endpoints\
+* controllers\
+* servicios\
+* middlewares\
+\
+### Data\
+\
+* modelos\
+* tablas / colecciones\
+\
+### Integraciones\
+\
+* Stripe\
+* OpenAI / Claude / Gemini\
+* Auth providers\
+* Webhooks\
+\
+---\
+\
+# 4. FUNCIONALIDADES (BREAKDOWN COMPLETO)\
+\
+Para cada feature:\
+\
+* nombre\
+* qu\'e9 hace\
+* estado:\
+\
+  * UI solamente\
+  * parcial\
+  * funcional\
+  * listo para producci\'f3n\
+* dependencias\
+* APIs involucradas\
+* si usa mock o data real\
+\
+---\
+\
+# 5. FLUJOS END-TO-END (CR\'cdTICO)\
+\
+Mapea flujos reales:\
+\
+Ejemplo:\
+\
+User signup \uc0\u8594  Auth \u8594  DB \u8594  Dashboard\
+User payment \uc0\u8594  Stripe \u8594  Webhook \u8594  DB \u8594  UI update\
+\
+Para cada flujo indica:\
+\
+* si funciona\
+* si est\'e1 roto\
+* si est\'e1 incompleto\
+\
+---\
+\
+# 6. AUDITOR\'cdA DE FRONTEND\
+\
+Eval\'faa:\
+\
+* navegaci\'f3n\
+* UX/UI\
+* botones\
+* formularios\
+* estados vac\'edos\
+* errores visibles\
+* responsive\
+\
+Marca:\
+\
+* FUNCIONA\
+* PARCIAL\
+* ROTO\
+\
+---\
+\
+# 7. AUDITOR\'cdA DE BACKEND\
+\
+Eval\'faa:\
+\
+* endpoints reales\
+* l\'f3gica de negocio\
+* validaciones\
+* manejo de errores\
+* seguridad b\'e1sica\
+\
+---\
+\
+# 8. CONECTIVIDAD FRONT \uc0\u8596  BACK\
+\
+Verifica:\
+\
+* qu\'e9 botones llaman APIs reales\
+* qu\'e9 est\'e1 hardcoded\
+* qu\'e9 no est\'e1 conectado\
+\
+---\
+\
+# 9. APIs EXTERNAS E INTEGRACIONES\
+\
+Para cada integraci\'f3n:\
+\
+* cu\'e1l es\
+* si est\'e1 implementada\
+* si est\'e1 conectada\
+* si requiere credenciales\
+* si est\'e1 lista para producci\'f3n\
+\
+---\
+\
+# 10. VARIABLES DE ENTORNO\
+\
+Lista todas:\
+\
+* nombre\
+* requerida\
+* presente\
+* usada correctamente\
+* falta / error\
+\
+---\
+\
+# 11. BASE DE DATOS Y PERSISTENCIA\
+\
+Eval\'faa:\
+\
+* si guarda datos reales\
+* qu\'e9 modelos existen\
+* qu\'e9 no est\'e1 conectado\
+\
+---\
+\
+# 12. AUDITOR\'cdA DE BOTONES Y ACCIONES\
+\
+Lista todos los botones/acciones:\
+\
+* create\
+* save\
+* edit\
+* delete\
+* publish\
+* connect\
+* upload\
+\
+Para cada uno:\
+\
+* funciona\
+* no hace nada\
+* incompleto\
+\
+---\
+\
+# 13. CALIDAD DE C\'d3DIGO\
+\
+Detecta:\
+\
+* c\'f3digo duplicado\
+* dead code\
+* TODOs\
+* malas pr\'e1cticas\
+* deuda t\'e9cnica\
+\
+---\
+\
+# 14. SEGURIDAD Y RIESGOS\
+\
+Eval\'faa:\
+\
+* API keys expuestas\
+* validaci\'f3n de inputs\
+* auth\
+* posibles vulnerabilidades\
+\
+---\
+\
+# 15. DEPLOYMENT Y ESTADO REAL\
+\
+Responde:\
+\
+* \'bfSe puede deployar hoy?\
+* \'bfQu\'e9 lo bloquea?\
+* \'bfQu\'e9 falta para producci\'f3n?\
+\
+---\
+\
+# 16. ESTADO GENERAL DE LA APP\
+\
+Entrega:\
+\
+* % completitud estimado\
+* nivel de madurez\
+* tipo:\
+\
+  * MVP\
+  * Beta\
+  * Producci\'f3n\
+\
+---\
+\
+# 17. HALLAZGOS CR\'cdTICOS (P0)\
+\
+Lista problemas graves:\
+\
+* qu\'e9 es\
+* impacto\
+* c\'f3mo arreglarlo\
+\
+---\
+\
+# 18. HALLAZGOS IMPORTANTES (P1)\
+\
+---\
+\
+# 19. HALLAZGOS MENORES (P2)\
+\
+---\
+\
+# 20. QUICK WINS (MENOS DE 1 HORA)\
+\
+Lista mejoras r\'e1pidas.\
+\
+---\
+\
+# 21. ROADMAP PARA TERMINARLA\
+\
+Divide en:\
+\
+* 1\'962 horas\
+* 1 d\'eda\
+* 3 d\'edas\
+\
+---\
+\
+# 22. POTENCIAL DE NEGOCIO\
+\
+Eval\'faa:\
+\
+* monetizaci\'f3n posible\
+* mercado\
+* escalabilidad\
+* valor real\
+\
+---\
+\
+# 23. RECOMENDACI\'d3N FINAL\
+\
+Elige UNA:\
+\
+* ABANDONAR\
+* ITERAR\
+* ESCALAR\
+* LISTA PARA LANZAR\
+\
+Explica por qu\'e9.\
+\
+---\
+\
+# 24. SCORE FINAL\
+\
+Califica:\
+\
+* producto (1\'9610)\
+* c\'f3digo (1\'9610)\
+* arquitectura (1\'9610)\
+* negocio (1\'9610)\
+\
+---\
+\
+# 25. RESUMEN EJECUTIVO\
+\
+En 10 l\'edneas m\'e1ximo:\
+\
+* qu\'e9 es la app\
+* estado real\
+* si vale la pena\
+* qu\'e9 hacer ahora\
+\
+---\
+\
+# REGLAS IMPORTANTES\
+\
+* No asumas nada\
+* Si no puedes verificar algo \uc0\u8594  dilo\
+* No seas superficial\
+* Prioriza claridad + verdad\
+* Identifica lo que REALMENTE est\'e1 funcionando\
+\
+---\
+\
+Empieza ahora y genera la Biblia completa de esta app.\
+}

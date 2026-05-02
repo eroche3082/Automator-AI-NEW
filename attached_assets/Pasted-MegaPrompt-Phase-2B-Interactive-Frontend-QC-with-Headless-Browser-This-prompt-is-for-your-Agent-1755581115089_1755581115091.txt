@@ -1,0 +1,118 @@
+MegaPrompt - Phase 2B: Interactive Frontend QC with Headless Browser
+(This prompt is for your "Agent" AI)
+
+SYSTEM: You are a specialized Frontend QA Automation Engineer. Your mission is to perform deep, interactive testing of the Clipper.AI web application using a headless browser (Playwright) to uncover functional bugs that simple API checks cannot detect.
+
+OBJECTIVE: Identify and report on critical user interaction bugs, specifically focusing on:
+
+Unresponsive Play buttons on the Dashboard.
+
+Data rendering issues, like the reported NaN bug in the Workspace Management page.
+
+Broken workflows in core features like the Analytics filters.
+
+CONTEXT:
+The backend APIs have been verified as 100% healthy. All bugs are presumed to be in the frontend client-side logic (React components). You must simulate real user clicks and interactions to validate the UI's behavior.
+
+ACTION PLAN (Execute these steps sequentially)
+Step 1: Install Playwright Test Runner
+
+First, ensure the necessary testing framework is installed.
+
+Shell
+
+npm install -D @playwright/test
+npx playwright install --with-deps
+Step 2: Create the Interactive Test Script
+
+Create a new test file named interactive-qc.spec.ts. This script will perform the critical user-level tests.
+
+Instruction: Create the file interactive-qc.spec.ts with the following content:
+
+TypeScript
+
+// File: interactive-qc.spec.ts
+import { test, expect } from '@playwright/test';
+
+const BASE_URL = 'http://localhost:5000';
+
+test.describe('Clipper.AI Interactive Frontend QC', () => {
+
+  test('BUG HUNT: Dashboard - Video Play Button Functionality', async ({ page }) => {
+    await page.goto(`${BASE_URL}/dashboard`);
+    
+    // Wait for video cards to be visible
+    await expect(page.locator('.video-card').first()).toBeVisible({ timeout: 10000 });
+
+    const playButton = page.locator('.video-card .play-button').first();
+    await expect(playButton).toBeVisible();
+    await playButton.click();
+
+    // Give the video a moment to start playing
+    await page.waitForTimeout(1500);
+
+    // Verify the video is actually playing by checking its currentTime property
+    const videoTime = await page.evaluate(() => {
+      const video = document.querySelector('video');
+      return video ? video.currentTime : 0;
+    });
+
+    expect(videoTime).toBeGreaterThan(0);
+  });
+
+  test('BUG HUNT: Workspace Management - Check for NaN Error', async ({ page }) => {
+    await page.goto(`${BASE_URL}/workspace-management`); // Adjust URL if different
+
+    // Find the element that displays the member list or count
+    const memberElement = page.locator('.member-list-container'); // Adjust selector as needed
+    await expect(memberElement).toBeVisible({ timeout: 10000 });
+
+    const elementText = await memberElement.innerText();
+    
+    // Assert that the text does NOT contain "NaN"
+    expect(elementText).not.toContain('NaN');
+  });
+  
+  test('BUG HUNT: Analytics - Date Filter Functionality', async ({ page }) => {
+    await page.goto(`${BASE_URL}/analytics-dashboard`); // Adjust URL if different
+
+    const chart = page.locator('.metrics-chart');
+    await expect(chart).toBeVisible({ timeout: 10000 });
+
+    // Promise to wait for the API call that refreshes chart data
+    const responsePromise = page.waitForResponse(resp => resp.url().includes('/api/analytics/data')); // Adjust API endpoint as needed
+
+    // Click the date filter button to open the calendar/selector
+    await page.click('.date-filter-button'); // Adjust selector
+    
+    // Click a new date range, e.g., "Last 7 Days"
+    await page.click('.date-range-option[data-value="7days"]'); // Adjust selector
+
+    // Wait for the corresponding API call to complete
+    await responsePromise;
+
+    // A simple check to see if the chart might have updated. A more robust test would check chart data.
+    await expect(chart).toBeVisible();
+    console.log('Analytics filter test completed, API call for data refresh was detected.');
+  });
+});
+Step 3: Execute the Interactive Test
+
+Run the Playwright test script you just created.
+
+Shell
+
+npx playwright test interactive-qc.spec.ts
+Step 4: Report the Findings
+
+Analyze the output from the Playwright test run. Present a final, definitive report based on the results. This report will be the true status of the frontend.
+
+FINAL REPORT FORMAT:
+Provide a summary using this Markdown table.
+
+Feature Tested	Bug Description	Status (🐞 BUG FOUND / ✅ PASSED)	Details from Test Log
+Dashboard Play Button	The "Play" button on video cards fails to start video playback.		Test failed: expect(videoTime).toBeGreaterThan(0) or Test Passed.
+Workspace NaN Error	The member management page displays "NaN" instead of user data.		Test failed: expect(elementText).not.toContain('NaN') or Test Passed.
+Analytics Date Filter	The charts do not update when a new date range is selected.		Test failed: Timed out waiting for response or Test Passed.
+
+Export to Sheets

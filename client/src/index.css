@@ -1,0 +1,284 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   SOCIAL BRANDS THEME SYSTEM
+   ======================================== */
+
+:root {
+  /* Light Theme Base */
+  --background: 0 0% 100%;                    /* #FFFFFF */
+  --foreground: 222.2 84% 4.9%;               /* #0A0A0A */
+  --card: 0 0% 100%;                          /* #FFFFFF */
+  --card-foreground: 222.2 84% 4.9%;         /* #0A0A0A */
+  --popover: 0 0% 100%;                       /* #FFFFFF */
+  --popover-foreground: 222.2 84% 4.9%;      /* #0A0A0A */
+  --primary: 224 100% 50%;                    /* #0047FF */
+  --primary-foreground: 0 0% 100%;            /* #FFFFFF */
+  --secondary: 281 100% 50%;                  /* #D100FF */
+  --secondary-foreground: 0 0% 100%;          /* #FFFFFF */
+  --accent: 0 100% 62%;                       /* #FF3E3E */
+  --accent-foreground: 0 0% 100%;             /* #FFFFFF */
+  --muted: 210 40% 96%;                       /* #F8F9FA */
+  --muted-foreground: 215.4 16.3% 46.9%;     /* #6C757D */
+  --destructive: 0 62.8% 30.6%;              /* #DC3545 */
+  --destructive-foreground: 0 0% 100%;        /* #FFFFFF */
+  --border: 214.3 31.8% 91.4%;               /* #E9ECEF */
+  --input: 214.3 31.8% 91.4%;                /* #E9ECEF */
+  --ring: 224 100% 50%;                       /* #0047FF */
+  --radius: 0.5rem;
+}
+
+.dark {
+  /* Dark Theme - Social Brands Style */
+  --background: 240 6% 5%;                    /* #0E0E0E - Black Matte */
+  --foreground: 0 0% 100%;                    /* #FFFFFF */
+  --card: 240 4% 8%;                          /* #151515 - Surface */
+  --card-foreground: 0 0% 100%;               /* #FFFFFF */
+  --popover: 240 4% 8%;                       /* #151515 */
+  --popover-foreground: 0 0% 100%;            /* #FFFFFF */
+  --primary: 224 100% 50%;                    /* #0047FF - Electric Blue */
+  --primary-foreground: 0 0% 100%;            /* #FFFFFF */
+  --secondary: 281 100% 50%;                  /* #D100FF - Violet/Pink */
+  --secondary-foreground: 0 0% 100%;          /* #FFFFFF */
+  --accent: 0 100% 62%;                       /* #FF3E3E - Legal Red */
+  --accent-foreground: 0 0% 100%;             /* #FFFFFF */
+  --muted: 240 4% 12%;                        /* #1F1F1F */
+  --muted-foreground: 0 0% 82%;               /* #D1D1D1 - Secondary Text */
+  --destructive: 0 62.8% 50%;                 /* #FF3E3E */
+  --destructive-foreground: 0 0% 100%;        /* #FFFFFF */
+  --border: 240 4% 12%;                       /* #1F1F1F */
+  --input: 240 4% 12%;                        /* #1F1F1F */
+  --ring: 224 100% 50%;                       /* #0047FF */
+}
+
+/* ========================================
+   BRAND GRADIENTS & EFFECTS
+   ======================================== */
+
+.brand-gradient {
+  background: linear-gradient(135deg, #0047FF 0%, #D100FF 50%, #FF3E3E 100%);
+}
+
+.brand-gradient-text {
+  background: linear-gradient(135deg, #0047FF 0%, #D100FF 50%, #FF3E3E 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-border {
+  background: linear-gradient(135deg, #0047FF, #D100FF, #FF3E3E);
+  padding: 1px;
+  border-radius: 0.75rem;
+}
+
+.gradient-border-inner {
+  background: hsl(var(--card));
+  border-radius: calc(0.75rem - 1px);
+  height: 100%;
+  width: 100%;
+}
+
+.enhanced-card {
+  @apply bg-[#151515] border border-gray-800 rounded-xl backdrop-blur-sm;
+  background: linear-gradient(135deg, rgba(21, 21, 21, 0.9) 0%, rgba(31, 31, 31, 0.8) 100%);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.gradient-pill {
+  @apply bg-gradient-to-r from-[#0047FF] via-[#D100FF] to-[#FF3E3E] text-white px-3 py-1 rounded-full text-sm font-medium;
+  transition: all 0.3s ease;
+}
+
+.gradient-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(0, 71, 255, 0.3);
+}
+
+/* Glow Effects */
+.glow-primary {
+  box-shadow: 0 0 20px rgba(0, 71, 255, 0.5);
+}
+
+.glow-secondary {
+  box-shadow: 0 0 20px rgba(209, 0, 255, 0.5);
+}
+
+.glow-accent {
+  box-shadow: 0 0 20px rgba(255, 62, 62, 0.5);
+}
+
+.glow-brand {
+  box-shadow: 0 0 30px rgba(0, 71, 255, 0.3), 0 0 60px rgba(209, 0, 255, 0.2);
+}
+
+/* ========================================
+   COMPONENT UTILITIES
+   ======================================== */
+
+.glass-effect {
+  backdrop-filter: blur(10px);
+  background: rgba(21, 21, 21, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.text-gradient {
+  @apply brand-gradient-text;
+}
+
+.gradient-border-top {
+  border-top: 2px solid;
+  border-image: linear-gradient(90deg, #0047FF, #D100FF, #FF3E3E) 1;
+}
+
+/* ========================================
+   ANIMATION UTILITIES
+   ======================================== */
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 20px rgba(0, 71, 255, 0.3);
+  }
+  to {
+    box-shadow: 0 0 30px rgba(209, 0, 255, 0.5), 0 0 40px rgba(255, 62, 62, 0.3);
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for dark theme */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0E0E0E;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #1F1F1F;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #2A2A2A;
+}
+
+:root {
+  --background: 0 0% 94%;
+  --foreground: 240 10% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 4%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 4%;
+  --primary: 221 90% 54%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 0 0% 92%;
+  --secondary-foreground: 240 6% 10%;
+  --muted: 0 0% 92%;
+  --muted-foreground: 240 4% 46%;
+  --accent: 240 5% 96%;
+  --accent-foreground: 240 6% 10%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 6% 90%;
+  --input: 240 6% 90%;
+  --ring: 221 90% 54%;
+  --radius: 0.5rem;
+  --chart-1: 221 90% 54%;
+  --chart-2: 282 100% 50%;
+  --chart-3: 0 100% 63%;
+  --chart-4: 160 84% 40%;
+  --chart-5: 43 96% 57%;
+}
+
+.dark {
+  --background: 240 10% 5%;
+  --foreground: 0 0% 100%;
+  --card: 240 10% 8%;
+  --card-foreground: 0 0% 100%;
+  --popover: 240 10% 8%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 221 90% 54%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 240 4% 12%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 240 4% 12%;
+  --muted-foreground: 240 5% 65%;
+  --accent: 240 4% 12%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 4% 16%;
+  --input: 240 4% 16%;
+  --ring: 221 90% 54%;
+  --chart-1: 221 90% 54%;
+  --chart-2: 282 100% 50%;
+  --chart-3: 0 100% 63%;
+  --chart-4: 160 84% 40%;
+  --chart-5: 43 96% 57%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-[#0047FF] via-[#D100FF] to-[#FF3E3E];
+}
+
+.gradient-btn {
+  @apply bg-gradient-to-r from-[#0047FF] to-[#D100FF] hover:shadow-[0_0_15px_rgba(0,71,255,0.5)] transition-all duration-300;
+}
+
+.circuit-bg {
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(0, 71, 255, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(209, 0, 255, 0.05) 0%, transparent 20%),
+    linear-gradient(to bottom right, rgba(0, 71, 255, 0.02) 0%, rgba(255, 62, 62, 0.02) 100%);
+  background-size: cover;
+}

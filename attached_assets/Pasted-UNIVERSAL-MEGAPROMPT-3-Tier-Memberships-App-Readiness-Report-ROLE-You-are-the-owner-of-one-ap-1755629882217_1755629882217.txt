@@ -1,0 +1,140 @@
+UNIVERSAL MEGAPROMPT — “3-Tier Memberships + App Readiness Report”
+
+ROLE
+You are the owner of one application in the Social Brands ecosystem. Your mission is to propose, implement, and verify a 3-tier membership system for your app and return a readiness report with checkmarks and evidence. Use the brand style guidelines and keep everything production-oriented (no mock data).
+
+OBJECTIVES
+
+Define three plans (Basic / Pro / Elite) aligned to your app’s services.
+
+Implement the plans in the app (feature gating, UI, content).
+
+Prepare for payments (Stripe Payment Links first; PayPal/etc. optional).
+
+Deliver a concise App Readiness Report with ✅/⚠️/❌ and URLs.
+
+PHASE A — Plan Design (standardized, no code yet)
+
+ Adopt naming: <APP> Basic, <APP> Pro, <APP> Elite.
+
+ Propose USD prices (monthly; add annual if relevant).
+
+ List included features for each tier (5–12 bullets per plan).
+
+ Define limits (seats, projects, storage, api calls, priority support, SLA).
+
+ Specify upgrade/downgrade behavior and trial (if any).
+
+ Provide success & cancel URLs for checkout redirect:
+
+https://<app>.socialbrands.ai/thank-you
+
+https://<app>.socialbrands.ai/cancelled
+
+Output (fill this table):
+
+# Membership Proposal — <APP_NAME>
+
+| Plan  | Monthly USD | Annual USD | Core Features (bulleted)                     | Limits (seats/projects/usage) | Notes |
+|------ |-------------|------------|----------------------------------------------|--------------------------------|------|
+| Basic | $           | $          | - … - … - …                                   | e.g., 1 seat, 3 projects       |      |
+| Pro   | $           | $          | - … - … - …                                   | e.g., 5 seats, 20 projects     |      |
+| Elite | $           | $          | - … - … - …                                   | e.g., 20 seats, unlimited      |      |
+
+
+And JSON (copy/paste ready):
+
+{
+  "app": "<APP_NAME>",
+  "plans": [
+    {"code":"basic","monthly":1900,"annual":19000,"features":["..."],"limits":{"seats":1,"projects":3}},
+    {"code":"pro","monthly":4900,"annual":49000,"features":["..."],"limits":{"seats":5,"projects":20}},
+    {"code":"elite","monthly":9900,"annual":99000,"features":["..."],"limits":{"seats":20,"projects":"unlimited"}}
+  ],
+  "successUrl":"https://<app>.socialbrands.ai/thank-you",
+  "cancelUrl":"https://<app>.socialbrands.ai/cancelled"
+}
+
+PHASE B — App Implementation (feature gating + UI)
+
+ Add a Pricing page showing the 3 tiers (brand colors, dark UI, Inter font).
+
+ Implement feature gating by plan (flags or middleware).
+
+ Add “Subscribe” buttons (initially can be placeholders).
+
+ Add “Manage billing” placeholder (will point to Customer Portal later).
+
+ Ensure plans & limits are config-backed (JSON/env), not hard-coded.
+
+ Add a Plan badge to user/account settings.
+
+Brand tokens to use:
+
+BG #0B0F1A | Surface #121826 | Primary #6C5CE7 | Accent #00E5A8 | Text #E6E8EC | Muted #94A3B8 | Danger #FF5D5D | Radius 16px | Font: Inter
+
+PHASE C — Payments Preparation (Stripe first; others later)
+
+If payments are already wired, keep them. If not, prepare Payment Links now.
+
+ Confirm LIVE keys present:
+
+STRIPE_SECRET_KEY = sk_live_…
+
+STRIPE_PUBLISHABLE_KEY = pk_live_…
+
+ Verify LIVE with:
+
+GET /v1/account → charges_enabled: true (record acct_…).
+
+ If allowed to create via API, generate Payment Links (one per plan) OR note that links will be injected by the central Payments Hub.
+
+ Record intended webhook URL (central hub) for automation later:
+
+https://payments.socialbrands.ai/webhooks/stripe (or current)
+
+Output:
+
+Keys present: sk_live ✅ / pk_live ✅
+Account OK: acct_xxx (charges_enabled:true) ✅
+Payment Links: basic=…, pro=…, elite=… (or: “to be provided by Hub”) 
+Webhook plan: URL + events (checkout.session.completed, customer.subscription.*)
+
+PHASE D — QA & Evidence
+
+ Pricing page renders correctly on production domain.
+
+ Buttons open the correct Payment Link (or placeholder).
+
+ Feature gating works when plan changes (use a flag to simulate).
+
+ No mock data in UI; loading/empty/error states covered.
+
+ Screenshots: pricing page, account page (plan badge), and logs of env keys in use (masked).
+
+DELIVERABLE — App Readiness Report (return this block)
+# <APP_NAME> — Membership Readiness Report
+
+## 1) Plan Definition
+<insert filled table + JSON>
+
+## 2) App Wiring
+- Pricing page URL: https://<app>.socialbrands.ai/pricing
+- Plan badge visible in: /account ✅
+- Feature gating: implemented via <middleware/hooks/guards> ✅
+
+## 3) Payments Status
+- LIVE keys present (masked): sk_live_*** / pk_live_*** ✅
+- Stripe account: acct_… (charges_enabled:true) ✅
+- Payment Links:
+  - Basic: https://buy.stripe.com/…
+  - Pro:   https://buy.stripe.com/…
+  - Elite: https://buy.stripe.com/…
+  (or: “provided by Hub”)
+- Webhook plan: https://payments.socialbrands.ai/webhooks/stripe (events: checkout.session.completed, customer.subscription.*)
+
+## 4) QA
+- Pricing page renders: ✅ (screenshot)
+- Buttons wired: ✅ / ⚠️ (explain)
+- Gating verified: ✅ (explain)
+- No mock data...

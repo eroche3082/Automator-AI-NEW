@@ -1,0 +1,2163 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2820
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\fswiss\fcharset0 ArialMT;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs29\fsmilli14667 \cf0 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 # MEGAPROMPT MAESTRO \'97 AUDITOR\'cdA TOTAL DE APP + QC 360 + STATUS REAL + READY FOR DEPLOYMENT
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## Rol del agente
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Act\'faa como un **Staff Engineer + QA Lead + DevOps Auditor + Full-Stack Reviewer + Product Release Manager + Integration Validator**.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Tu misi\'f3n es realizar una **auditor\'eda total, profunda, t\'e9cnica y ejecutable** del proyecto/app actual, verificar el **status real de la aplicaci\'f3n**, determinar **qu\'e9 funciona**, **qu\'e9 no funciona**, **qu\'e9 falta**, **qu\'e9 est\'e1 desconectado**, **qu\'e9 bloquea deployment** y dejar un **reporte maestro con prioridad de cierre**.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 No quiero una revisi\'f3n superficial.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Quiero una verificaci\'f3n **real**, con evidencia, pruebas, hallazgos, severidad, riesgos, estado funcional y plan exacto para terminar la app.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## 1) Biblia Contexto del proyecto/ TREE/ MAP DE TODO LOS ASSETS, TABS/SUBTABS
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Proyecto / app actual: **[NOMBRE DE LA APP]**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Repositorio GitHub: **[OWNER/REPO]**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Workspace / entorno actual: **[WORKSPACE O URL]**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Objetivo del producto: **[DESCRIBE QU\'c9 HACE LA APP]**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Tipo de producto: **[web app / mobile web / dashboard / SaaS / marketplace / social tool / CRM / AI app / etc.]**
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Debes validar el estado real de todas las capas:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * Front-end / UI
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Back-end / APIs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Base de datos / persistencia / storage
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Integraciones externas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Autenticaci\'f3n / permisos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Variables de entorno / secretos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Repositorio Git / ramas / remoto / sincronizaci\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Build / preview / deployment / producci\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Flujo end-to-end real
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## 2) Objetivo principal
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Haz un **QC scanning 360\'b0** y determina con precisi\'f3n:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * Qu\'e9 s\'ed est\'e1 implementado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Qu\'e9 est\'e1 incompleto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Qu\'e9 est\'e1 roto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Qu\'e9 no est\'e1 conectado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Qu\'e9 est\'e1 mockeado o hardcodeado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Qu\'e9 depende de credenciales o variables faltantes
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Qu\'e9 impide el funcionamiento end-to-end
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Qu\'e9 impide deployment
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Qu\'e9 se necesita hacer hoy para cerrar la aplicaci\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Qu\'e9 est\'e1 listo para producci\'f3n y qu\'e9 no
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Quiero una auditor\'eda **operativa**, no solo descriptiva.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## 3) Reglas de ejecuci\'f3n obligatorias
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### Reglas cr\'edticas
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * **No asumas nada. Verifica todo.**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Si algo no se puede confirmar, m\'e1rcalo expl\'edcitamente como:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 \'a0\'a0* **NO VERIFICADO**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* **BLOQUEADO**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* **REQUIERE CREDENCIAL**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* **REQUIERE ACCESO**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* **REQUIERE API EXTERNA**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* **REQUIERE DATOS REALES**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Si encuentras errores, no te limites a listarlos. Para cada uno explica:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 \'a0\'a0* impacto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* causa probable
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* severidad
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* ruta/archivo afectado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* fix recomendado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Si el entorno permite corregir algo directamente, hazlo o prop\'f3n el cambio exacto.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Si hay discrepancias entre:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 \'a0\'a0* UI
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* c\'f3digo
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* APIs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* GitHub
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* runtime
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* deployment
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0\'a0\'a0rep\'f3rtalas con claridad.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Verifica tanto el c\'f3digo como el estado funcional en runtime o preview.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * No confundas una UI bonita con una app funcional.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * No marques un m\'f3dulo como \'93listo\'94 si solo existe visualmente.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Debes dejar claro qu\'e9 es:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 \'a0\'a0* **UI solamente**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* **Parcial**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* **Funcional**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 \'a0\'a0* **Listo para prod**
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## 4) Fases obligatorias de auditor\'eda
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Ejecuta estas fases **en orden** y documenta resultados por fase.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 1 \'97 Inventario total del proyecto
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Haz un escaneo completo del proyecto y genera inventario de:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * stack tecnol\'f3gico
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * framework front-end
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * framework back-end
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * lenguaje(s)
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * package manager
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * scripts disponibles
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * estructura de carpetas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * p\'e1ginas / rutas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * componentes principales
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * m\'f3dulos de negocio
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * APIs / endpoints
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * servicios / integraciones
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * modelos / schemas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * configuraci\'f3n de build
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * configuraci\'f3n de deployment
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * archivos de entorno
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * tests existentes
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * workflows CI/CD si existen
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * mapa general del proyecto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * \'e1rbol resumido de carpetas importantes
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * lista de m\'f3dulos funcionales detectados
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 2 \'97 Verificaci\'f3n del repositorio Git / GitHub
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Valida:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * si el repo seleccionado es el correcto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * estado del remoto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * rama actual
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * upstream
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * acceso de lectura y escritura
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * si el workspace est\'e1 enlazado de verdad a GitHub
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * si push / pull funcionan
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * si hay divergencias entre local y remoto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * cambios locales sin subir
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * conflictos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * repo mal enlazado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * branch mismatch
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * remote roto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * token inv\'e1lido
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * permisos insuficientes
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * autenticaci\'f3n vencida
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * app integration rota
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * estado Git/GitHub real
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * bloqueadores exactos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * pasos espec\'edficos para corregir la sincronizaci\'f3n
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 3 \'97 Salud del entorno y dependencias
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Revisa:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * package.json
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * requirements.txt / pyproject / composer / Gemfile / etc., si aplican
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * lockfiles
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * dependencias
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * devDependencies
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * peer dependencies
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * paquetes faltantes
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * imports rotos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * conflictos de versi\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * scripts inv\'e1lidos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * bundler
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * lint config
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * TypeScript config si existe
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Ejecuta o simula:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * install
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * build
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * lint
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * type-check
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * test
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * tabla de salud del entorno
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * errores de instalaci\'f3n / compilaci\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * dependencias problem\'e1ticas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * riesgos de compatibilidad
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 4 \'97 Auditor\'eda de front-end
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Haz QC completo del front-end:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * routing
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * navegaci\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * layouts
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * responsive
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * componentes
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * formularios
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * validaciones
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * loaders
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * estados vac\'edos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * estados de error
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * modales
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * tablas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * tabs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * dropdowns
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * dashboards
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * assets
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * branding
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * consistencia visual
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * console errors
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * rendering errors
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * componentes desconectados
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * botones vac\'edos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * placeholders sin terminar
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * links rotos
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Prueba cada vista detectada.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * lista de vistas auditadas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * issues por pantalla
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * severidad
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * acciones incompletas
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 5 \'97 Auditor\'eda de back-end y l\'f3gica
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Valida:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * estructura del back-end
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * server / app entrypoint
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * APIs / routes
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * controllers / handlers
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * middlewares
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * auth / permissions
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * validaci\'f3n de payloads
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * manejo de errores
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * servicios internos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * jobs / queue / cron si existen
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * l\'f3gica de negocio
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * m\'f3dulos cr\'edticos
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * mapa de endpoints
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * endpoints funcionales / parciales / mock
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * l\'f3gica rota o incompleta
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * riesgos de producci\'f3n
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 6 \'97 Conectividad front-end \uc0\u8596  back-end
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Verifica expl\'edcitamente:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * qu\'e9 botones llaman APIs reales
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 formularios guardan datos de verdad
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 m\'f3dulos usan mocks
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 data est\'e1 hardcodeada
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 acciones fallan silenciosamente
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 endpoints responden pero no actualizan UI
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 flujos est\'e1n completos o incompletos
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Traza flujos as\'ed:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 **UI action \uc0\u8594  service \u8594  API \u8594  DB/data layer \u8594  response \u8594  UI refresh**
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * matriz de conexi\'f3n front/back
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * flujos completos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * flujos rotos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * flujos simulados
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 7 \'97 APIs externas e integraciones
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Detecta y verifica cualquier integraci\'f3n externa, como por ejemplo:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * auth providers
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * email
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * social APIs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * payments
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * analytics
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * AI providers
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * CMS
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * storage
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * webhooks
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * third-party dashboards
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * CRMs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * external databases
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * embeddings / vector DB
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * schedulers / queues
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Para cada integraci\'f3n indica:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * implementada o no
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * conectada o no
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * requiere credencial
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * usa mock
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * usa fallback manual
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * lista o no para prod
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Tabla con estado:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * **LISTO**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **PARCIAL**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **MOCK**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **BLOQUEADO POR CREDENCIAL**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **NO IMPLEMENTADO**
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 8 \'97 Variables de entorno y secretos
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Revisa a fondo:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * `.env`
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * `.env.example`
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * secretos del workspace
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * variables referenciadas en c\'f3digo
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * variables faltantes
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * nombres incorrectos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * secrets expuestos en cliente
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * hardcoded secrets
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * URLs base
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * modo dev vs prod
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * configuraci\'f3n de dominios / callbacks / webhooks
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Tabla:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * variable
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * requerida
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * presente
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * correctamente usada
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * entorno
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * observaciones
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 9 \'97 Persistencia, base de datos y storage
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Si existe persistencia, valida:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * conexi\'f3n a DB
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * ORM / client
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * modelos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * migraciones
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * seeds
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * tablas / colecciones
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * lecturas y escrituras reales
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * manejo de errores
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * storage de archivos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * relaci\'f3n entre entidades
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * m\'f3dulos que guardan realmente vs UI-only
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * estado real de persistencia
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 guarda datos de verdad
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 no
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * bloqueadores de datos
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 10 \'97 QA funcional por m\'f3dulos
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Ejecuta QA funcional por cada m\'f3dulo detectado.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Para cada m\'f3dulo valida:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * create
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * read
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * update
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * delete
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * validaciones
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * estados vac\'edos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * persistencia
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * errores visibles
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * permisos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * confirmaciones
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * sincronizaci\'f3n de datos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * UX rota
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * API conectada
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * casos edge
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Tabla por m\'f3dulo:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * m\'f3dulo
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * estado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * cobertura actual
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * bugs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * faltantes
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * completitud estimada %
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 11 \'97 Auditor\'eda de botones, handlers y acciones
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Haz revisi\'f3n quir\'fargica de todos los elementos interactivos:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * botones
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * CTAs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * icon buttons
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * toggles
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * tabs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * men\'fas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * dropdowns
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * links
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * submits
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * uploads
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * exports
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * sync
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * schedule
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * connect
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * publish
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * preview
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * delete
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * duplicate
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * save
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * edit
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Confirma si:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * funciona
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * funciona parcialmente
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * no hace nada
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * no tiene handler
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * tiene handler pero no flujo
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * est\'e1 deshabilitado sin motivo
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Inventario de acciones:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * **FUNCIONA**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **PARCIAL**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **NO FUNCIONA**
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Con ruta / componente afectado.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 12 \'97 Calidad de c\'f3digo y deuda t\'e9cnica
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Haz code review profundo:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * duplicaci\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * dead code
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * archivos hu\'e9rfanos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * componentes no usados
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * TODOs / FIXMEs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * malas pr\'e1cticas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * naming pobre
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * falta de tipado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * manejo deficiente de errores
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * logs sensibles
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * complejidad excesiva
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * riesgo de bugs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * deuda t\'e9cnica cr\'edtica
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * top 20 riesgos t\'e9cnicos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * quick wins
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * refactors recomendados
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * deuda cr\'edtica vs deuda tolerable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 13 \'97 Seguridad, performance y estabilidad
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Audita:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * exposici\'f3n de secretos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * validaci\'f3n de inputs
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * sanitizaci\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * auth guards
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * CORS
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * rate limit si aplica
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * uploads inseguros
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * XSS / CSRF b\'e1sicos si aplican
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * bundle size
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * render innecesario
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * requests duplicadas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * lazy loading
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * memory leaks visibles
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * retries / fallbacks
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * errores de estabilidad
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * riesgos de seguridad
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * riesgos de performance
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * prioridad de remediaci\'f3n
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 14 \'97 Build, deployment y readiness real
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Verifica si la app est\'e1 realmente lista para deployment:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * build limpio
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * start command
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * production env
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * puertos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * rewrites / SPA fallback
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * static assets
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Docker / Vercel / Netlify / Replit / Railway / Render / etc.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * logs cr\'edticos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * health checks
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * readiness del runtime
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * fallos al publicar
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * dependencias de dominio / credenciales / webhooks
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Debes responder claramente:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * **\'bfSe puede desplegar hoy?**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **\'bfQu\'e9 lo bloquea?**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **\'bfQu\'e9 falta exactamente para producci\'f3n?**
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 #### Entregable
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * checklist deployment-ready
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * bloqueadores P0
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * pasos m\'ednimos para salir hoy
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### FASE 15 \'97 Reporte maestro + plan de cierre hoy
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Consolida todo y entrega reporte ejecutivo + t\'e9cnico con:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * estado general real
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * % estimado de completitud
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * estado por m\'f3dulo
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * blockers
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * issues por prioridad
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 s\'ed puede cerrarse hoy
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 requiere acceso / credencial
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 requiere desarrollo
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * camino m\'ednimo para deployment
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Y cierra con uno de estos veredictos:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * **NO LISTO**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **LISTO CON AJUSTES**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **LISTO PARA DEPLOY**
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## 5) Formato obligatorio del reporte final
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Entrega el resultado exactamente con esta estructura:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### A. Executive Summary
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * Estado general del proyecto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Riesgo general
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * \'bfListo para deployment?: S\'ed / No / Condicional
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Completitud estimada: XX%
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Bloqueadores cr\'edticos: N
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### B. Hallazgos cr\'edticos (P0)
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Para cada hallazgo:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * ID
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * T\'edtulo
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Severidad
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * \'c1rea
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Evidencia
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Impacto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Causa probable
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Archivo / ruta
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Fix recomendado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Estado
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### C. Hallazgos importantes (P1)
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Mismo formato.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### D. Hallazgos medios (P2)
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Mismo formato.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### E. Estado por m\'f3dulo
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Tabla con columnas:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * M\'f3dulo
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Estado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Front-end
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Back-end
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * API
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Persistencia
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * UX
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Integraciones
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * % completitud
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Notas
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### F. Estado de integraciones
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Tabla con columnas:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * Integraci\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Implementada
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Conectada
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Credencial requerida
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Lista para prod
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Observaciones
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### G. Estado Git / GitHub / Repositorio
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * repo correcto o no
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * rama actual
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * remoto funcional o no
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * push / pull habilitado o no
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * bloqueadores exactos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * pasos para corregirlo
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### H. Estado de variables de entorno
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Tabla:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * Variable
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Requerida
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Presente
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Correctamente usada
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Entorno
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Observaciones
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### I. Matriz de pruebas funcionales
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Tabla:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * Flujo
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Resultado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Evidencia
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Estado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Observaciones
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### J. Lista exacta de lo que falta para cerrar hoy
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Checklist accionable y priorizado.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### K. Plan de acci\'f3n de hoy
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Div\'eddelo en:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * Sprint de 1 hora
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Sprint de 2 a 4 horas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Sprint de cierre final
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### L. Veredicto final
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Una sola opci\'f3n:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * **NO LISTO**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **LISTO CON AJUSTES**
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * **LISTO PARA DEPLOY**
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Y expl\'edcalo en 5\'9610 l\'edneas sin relleno.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## 6) Instrucciones especiales
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### a) Detecta problemas de GitHub autom\'e1ticamente
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Si GitHub est\'e1 conectado pero no accesible, identifica si el problema es:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * token
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * permisos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * app integration
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * remote mal configurado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * branch incorrecta
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * repo equivocado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * autenticaci\'f3n caducada
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * limitaci\'f3n del entorno
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### b) Detecta mocks, hardcoded data o simulaciones
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Debes marcar claramente qu\'e9 es:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * mock
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * hardcoded
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * demo data
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * placeholder
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * UI-only
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * no conectado
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### c) Detecta handlers vac\'edos o features a medias
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Especialmente verifica estas acciones:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * Publish
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Export
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Save
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Edit
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Delete
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Create
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Sync
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Connect account
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Upload
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Schedule
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Assign
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Approve
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Generate
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Send
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Retry
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * Preview
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### d) Verifica readiness real de m\'f3dulos
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Para cada m\'f3dulo, indica si est\'e1:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * implementado visualmente
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * implementado funcionalmente
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * conectado a API
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * persistiendo datos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * listo para producci\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * bloqueado por credenciales
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * bloqueado por review externa
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * bloqueado por permisos
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### e) Para cada issue cr\'edtico da fix concreto
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Indica:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * archivo a tocar
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * cambio recomendado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * orden ideal de ejecuci\'f3n
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * impacto esperado
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## 7) Criterios de aceptaci\'f3n
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Solo considera la app \'93lista\'94 si se cumplen estos puntos:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * front-end sin errores cr\'edticos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * navegaci\'f3n funcional
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * botones clave operativos
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * flujos principales conectados a back-end
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * persistencia real donde corresponde
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * APIs esenciales disponibles
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * variables cr\'edticas definidas
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * repo GitHub correctamente enlazado
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * build exitoso
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * sin bloqueadores P0
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * deployment viable hoy
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Si no se cumple algo, dilo sin suavizarlo.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## 8) Prioridad absoluta
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Tu prioridad es ayudarme a **terminar la aplicaci\'f3n hoy**.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Por lo tanto, adem\'e1s de auditar, debes decirme con claridad:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 * qu\'e9 est\'e1 roto
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 falta
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 se arregla primero
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 requiere credenciales
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 requiere acceso
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 bloquea publicaci\'f3n hoy
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * qu\'e9 s\'ed se puede cerrar hoy
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 * cu\'e1l es el camino m\'ednimo para salir
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## 9) Cierre obligatorio
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Termina SIEMPRE con estas 3 secciones:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### 1. Top 10 blockers para salir hoy
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Lista priorizada.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### 2. Quick wins de menos de 1 hora
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Lista accionable.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ### 3. Camino m\'ednimo para deployment hoy
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Pasos exactos, concretos y en orden.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## 10) Instrucci\'f3n final al agente
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Empieza ya.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 No me des teor\'eda.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 No me des una opini\'f3n general.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Haz la auditor\'eda real, fase por fase, con evidencia, severidad, matrices, tabla de status y veredicto final.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Si algo no se puede verificar, dilo claramente.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Si algo est\'e1 roto, identif\'edcalo y prop\'f3n fix.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Si algo impide deployment, dilo sin ambig\'fcedad.
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Tu objetivo es dejar esta app en condici\'f3n de cierre hoy.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ---
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ## Versi\'f3n corta para pegar r\'e1pido
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Aqu\'ed te dejo una versi\'f3n m\'e1s compacta para uso diario:
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 ```text
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 Act\'faa como Staff Engineer + QA Lead + DevOps Auditor + Full-Stack Reviewer. Haz una auditor\'eda total de esta app y su repo. Verifica front-end, back-end, APIs, DB, integraciones, variables, GitHub, build y deployment. No asumas nada: verifica todo. Detecta qu\'e9 funciona, qu\'e9 no, qu\'e9 est\'e1 mockeado, qu\'e9 est\'e1 hardcodeado, qu\'e9 est\'e1 desconectado, qu\'e9 requiere credenciales, qu\'e9 bloquea deployment y qu\'e9 falta para cerrar hoy.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Ejecuta 15 fases: inventario del proyecto, Git/GitHub, dependencias y entorno, front-end, back-end, conectividad front-back, integraciones externas, variables de entorno, base de datos, QA funcional por m\'f3dulos, botones/handlers/eventos, calidad de c\'f3digo, seguridad/performance, deployment readiness y reporte maestro final.
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Entrega:
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 A) Executive Summary
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 B) Hallazgos P0
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 C) Hallazgos P1
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 D) Hallazgos P2
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 E) Estado por m\'f3dulo
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 F) Estado de integraciones
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 G) Estado Git/GitHub
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 H) Variables de entorno
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 I) Matriz de pruebas funcionales
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 J) Lista exacta de lo que falta para cerrar hoy
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 K) Plan de acci\'f3n hoy
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 L) Veredicto final: NO LISTO / LISTO CON AJUSTES / LISTO PARA DEPLOY
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Cierra siempre con:
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 1. Top 10 blockers para salir hoy
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 2. Quick wins de menos de 1 hora
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 3. Camino m\'ednimo para deployment hoy
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 ```
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Tambi\'e9n te dejo una mejora importante: tu prompt original est\'e1 muy bueno, pero este gen\'e9rico queda m\'e1s reusable para **cualquier app**, no solo marketing/social. El archivo que compartiste va en esa misma l\'ednea y sirve como base de este formato ampliado.\'a0
+\f0\fs24 \
+\
+
+\f1\fs29\fsmilli14667 Puedo convertirlo ahora en una versi\'f3n especializada para:
+\f0\fs24 \
+
+\f1\fs29\fsmilli14667 **apps SaaS**, **apps con IA**, **marketplaces**, **dashboards**, o **apps m\'f3viles/web**.
+\f0\fs24 \
+\
+\
+}

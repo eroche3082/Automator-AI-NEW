@@ -1,0 +1,87 @@
+Pasted-Comienza-a-usar-la-API-de-Gemini-con-los-SDKs-de-Logic-de-IA-de-Firebase-bookmark-border-En-esta-gu-1754499320865_1754499320867.txt
+Comienza a usar la API de Gemini con los SDKs de Logic de IA de Firebase
+
+bookmark_border
+En esta guía, se muestra cómo comenzar a realizar llamadas a Gemini API directamente desde tu app con los SDKs de cliente de Firebase AI Logic para la plataforma que elijas.
+
+También puedes usar esta guía para comenzar a acceder a los modelos de Imagen con los SDKs de Firebase AI Logic.
+
+
+Firebase AI Logic y sus SDKs de cliente se llamaban anteriormente "Vertex AI in Firebase". En mayo de 2025, cambiamos el nombre y reorganizamos nuestros servicios en Firebase AI Logic para reflejar mejor nuestros servicios y funciones expandidos. Por ejemplo, ahora admitimos Gemini Developer API.
+Requisitos previos
+Swift
+Kotlin
+Java
+Web
+Dart
+Unity
+En esta guía, se da por sentado que conoces el uso de Xcode para desarrollar apps para plataformas de Apple (como iOS).
+
+Asegúrate de que tu entorno de desarrollo y la app para plataformas de Apple cumplan con estos requisitos:
+
+Xcode 16.2 o una versión posterior
+Tu app se segmenta para iOS 15 o versiones posteriores, o macOS 12 o versiones posteriores.
+(Opcional) Revisa la app de ejemplo.
+
+Descarga la app de inicio rápido
+
+Puedes probar el SDK rápidamente, ver una implementación completa de varios casos de uso o usar la app de ejemplo si no tienes tu propia app para plataformas de Apple. Para usar la app de ejemplo, deberás conectarla a un proyecto de Firebase.
+
+Paso 1: Configura un proyecto de Firebase y conecta tu app
+Accede a la consola de Firebase y, luego, selecciona tu proyecto de Firebase.
+
+¿Aún no tienes un proyecto de Firebase?
+
+En la consola de Firebase, ve a la página Firebase AI Logic.
+
+Haz clic en Comenzar para iniciar un flujo de trabajo guiado que te ayudará a configurar las APIs requeridas y los recursos para tu proyecto.
+
+Selecciona el proveedor "Gemini API" que deseas usar con los SDKs de Firebase AI Logic. Gemini Developer API se recomienda para los usuarios que acceden por primera vez. Si lo deseas, puedes agregar la facturación o configurar Vertex AI Gemini API más adelante.
+
+Gemini Developer API: Facturación opcional (disponible en el plan de precios Spark sin costo, y puedes actualizarlo más adelante si lo deseas)
+La consola habilitará las APIs requeridas y creará una clave de API Gemini en tu proyecto.
+No agregues esta clave de API de Gemini a la base de código de tu app. Obtén más información.
+
+Vertex AI Gemini API: Se requiere facturación (requiere el plan de precios Blaze de pago por uso)
+La consola te ayudará a configurar la facturación y habilitar las APIs requeridas en tu proyecto.
+
+Si se te solicita en el flujo de trabajo de la consola, sigue las instrucciones en pantalla para registrar tu app y conectarla a Firebase.
+
+Continúa con el siguiente paso de esta guía para agregar el SDK a tu app.
+
+Nota: En la consola de Firebase, se recomienda que configures Firebase App Check. Si solo estás probando Gemini API, no es necesario que configures App Check de inmediato. Sin embargo, te recomendamos que lo hagas en cuanto comiences a desarrollar tu app en serio.
+Paso 2: Agrega el SDK
+Una vez que hayas configurado tu proyecto de Firebase y conectado tu app a Firebase (consulta el paso anterior), puedes agregar el SDK de Firebase AI Logic a tu app.
+
+Swift
+Kotlin
+Java
+Web
+Dart
+Unity
+Usa Swift Package Manager para instalar y administrar las dependencias de Firebase.
+
+Nota: Consulta nuestra guía de instalación para obtener información sobre las diferentes formas en que puedes agregar los SDK de Firebase a tu proyecto de Apple, como importar frameworks directamente y usar CocoaPods.
+La biblioteca de Firebase AI Logic proporciona acceso a las APIs para interactuar con los modelos de Gemini y Imagen. La biblioteca se incluye como parte del SDK de Firebase para plataformas de Apple (firebase-ios-sdk).
+
+Si ya usas Firebase, asegúrate de que tu paquete de Firebase sea la versión 11.13.0 o posterior.
+
+En Xcode, con tu proyecto de app abierto, navega a File > Add Package Dependencies.
+
+Cuando se te solicite, agrega el repositorio del SDK de Firebase para plataformas de Apple:
+
+
+https://github.com/firebase/firebase-ios-sdk
+Selecciona la versión más reciente del SDK.
+
+Selecciona la biblioteca de FirebaseAI.
+
+Cuando termines, Xcode comenzará a resolver y descargar automáticamente tus dependencias en segundo plano.
+
+Paso 3: Inicializa el servicio y crea una instancia del modelo
+
+Haz clic en tu proveedor de Gemini API para ver el contenido y el código específicos del proveedor en esta página.
+
+API para desarrolladores de Gemini API de Gemini de Vertex AI
+Cuando usas los SDKs cliente de Firebase AI Logic con Gemini Developer API, NO agregues tu clave de API de Gemini al código de tu app. Obtén más información.
+Antes de enviar una instrucción a un modelo Gemini, inicializa el servicio para el proveedor de la API que elijas y crea una instancia de Genera...

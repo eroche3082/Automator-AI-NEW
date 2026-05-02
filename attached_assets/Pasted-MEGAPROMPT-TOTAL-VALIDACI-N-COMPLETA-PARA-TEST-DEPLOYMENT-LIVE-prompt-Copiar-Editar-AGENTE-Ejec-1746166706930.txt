@@ -1,0 +1,186 @@
+MEGAPROMPT TOTAL – VALIDACIÓN COMPLETA PARA TEST & DEPLOYMENT LIVE
+prompt
+Copiar
+Editar
+AGENTE: Ejecuta un escaneo completo del sistema. Tu misión es confirmar que la plataforma está lista para pruebas en vivo, producción y despliegue total. Verifica todo lo siguiente paso por paso.
+
+---
+
+### FASE 1 – VALIDACIÓN DEL ARCHIVO DE CREDENCIALES
+
+1. Verifica que el archivo **`google-credentials-global.json`** esté presente en la ruta:
+```bash
+/.keys/google-credentials-global.json
+o dentro del proyecto en:
+
+bash
+Copiar
+Editar
+./google-credentials-global.json
+Confirma que:
+
+Contiene private_key, client_email, project_id
+
+Se esté utilizando como variable de entorno global:
+
+env
+Copiar
+Editar
+GOOGLE_APPLICATION_CREDENTIALS="/home/eroche/.keys/google-credentials-global.json"
+Asegura que el sistema esté autenticado y conectado a Vertex AI con este archivo.
+
+FASE 2 – VERIFICACIÓN DE VARIABLES Y SECRETS
+Confirma que están activas y accesibles:
+
+VERTEX_AI_PROJECT_ID
+
+VERTEX_AI_REGION
+
+VERTEX_AI_ENDPOINT_ID
+
+STRIPE_SECRET_KEY
+
+SENDGRID_API_KEY
+
+DATABASE_URL
+
+AMADEUS_API_KEY, AMADEUS_API_SECRET
+
+GOOGLE_TRANSLATE_API_KEY
+
+YOUTUBE_API_KEY
+
+VITE_FIREBASE_API_KEY, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID
+
+FASE 3 – TESTEO DE MODELOS CONECTADOS A VERTEX AI
+Haz un test corto con los siguientes modelos:
+
+json
+Copiar
+Editar
+[
+  "publishers/google/models/gemini-2.5-pro-preview-0325",
+  "publishers/google/models/gemini-1.5-flash-preview-0409",
+  "publishers/anthropic/models/claude-3-sonnet",
+  "publishers/anthropic/models/claude-3-opus",
+  "publishers/mistralai/models/mixtral-8x7b",
+  "publishers/meta/models/llama-2-70b-chat",
+  "publishers/deepseek-ai/models/deepseek-v3",
+  "publishers/google/models/gemma-2b",
+  "publishers/google/models/text-bison",
+  "publishers/google/models/imagen"
+]
+Usa el prompt:
+
+text
+Copiar
+Editar
+"Say hello from [model_name] on [current date]."
+FASE 4 – CONFIRMACIÓN DE LIBRERÍAS INSTALADAS
+Valida que estén presentes y funcionales:
+
+@google-cloud/aiplatform
+
+vertexai
+
+google-auth-library
+
+firebase-admin
+
+stripe
+
+@sendgrid/mail
+
+axios
+
+dotenv
+
+anthropic (opcional)
+
+FASE 5 – TESTEO DE APIs EN PRODUCCIÓN
+Realiza pruebas en vivo con:
+
+Amadeus: POST Token + GET Flight Offers
+
+Stripe: Crear producto/cliente
+
+SendGrid: Enviar email a eroche@socialbrands.ai
+
+Translate: Traducir "Hola mundo" al inglés
+
+YouTube API: Buscar "AI Travel Experience"
+
+FASE 6 – VALIDACIÓN DEL FRONTEND
+Verifica que:
+
+Existan mínimo 5 tabs y subtabs
+
+Todos los botones estén conectados a acciones funcionales
+
+El chatbot o avatar esté funcionando si aplica
+
+Los endpoints respondan correctamente:
+
+/api/flights
+
+/api/events
+
+/api/chat
+
+/api/payment
+
+/api/dashboard
+
+Firebase esté correctamente vinculado y funcionando
+
+FASE 7 – RECOMENDACIONES INTELIGENTES
+Sugiere:
+
+Nuevos APIs que puedan integrarse
+
+Features recomendados para lanzar en esta fase
+
+Modelos adicionales en Vertex AI que puedan ser útiles
+
+FORMATO DE RESPUESTA
+json
+Copiar
+Editar
+{
+  "status": "✅ LIVE | ❌ PENDING | ⚠️ ERROR",
+  "google_credentials": "✅",
+  "vertex_connection": "✅",
+  "models_tested": {
+    "gemini_25_pro": "✅",
+    "claude_sonnet": "✅",
+    ...
+  },
+  "api_keys": {
+    "amadeus": "✅",
+    "stripe": "✅",
+    "sendgrid": "❌",
+    ...
+  },
+  "frontend": {
+    "tabs": 6,
+    "broken_buttons": [],
+    "avatar_status": "✅"
+  },
+  "libraries": {
+    "@google-cloud/aiplatform": "✅",
+    "stripe": "✅",
+    "firebase-admin": "✅",
+    ...
+  },
+  "recommendations": [
+    "Integrar Twilio para verificación telefónica",
+    "Añadir onboarding QR con Firebase Dynamic Links"
+  ],
+  "notes": "Todo listo para pruebas en vivo. SendGrid y Webhooks Stripe en pending."
+}
+Finaliza con:
+“SYSTEM CHECK COMPLETE. READY FOR GLOBAL TESTING AND LAUNCH, CAPITANA.”
+
+yaml
+Copiar
+Editar

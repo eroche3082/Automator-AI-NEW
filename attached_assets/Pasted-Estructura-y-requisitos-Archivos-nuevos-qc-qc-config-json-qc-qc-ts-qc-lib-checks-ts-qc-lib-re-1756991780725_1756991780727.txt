@@ -1,0 +1,343 @@
+Estructura y requisitos
+
+Archivos nuevos:
+
+/qc/qc.config.json
+/qc/qc.ts
+/qc/lib/checks.ts
+/qc/lib/report.ts
+
+
+Dependencias:
+
+npm i dotenv node-fetch@3
+npm i -D @types/node
+# (opcional) Stripe SDK si quieres validar en vivo el catálogo:
+npm i stripe
+
+
+Secrets esperados (ajusta según app):
+
+NEON_DATA_API_URL (si usas Data API) o DATABASE_URL (si usas driver pg)
+
+NEON_DATA_API_KEY
+
+STRIPE_API_KEY (si usas Stripe)
+
+GEMINI_API_KEY o GOOGLE_APPLICATION_CREDENTIALS (si validas Vertex AI)
+
+BASE_URL (URL pública del frontend), API_BASE_URL (si es distinto)
+
+Puedes inyectar estos secrets en Replit, Functions config o GitHub Actions.
+
+1) Configuración declarativa
+
+/qc/qc.config.json (edítalo por app/agent):
+
+{
+  "appName": "CineImagine Business Studio",
+  "env": {
+    "NEON_MODE": "data_api", 
+    "BASE_URL": "https://tu-app.web.app",
+    "API_BASE_URL": "https://tu-app.web.app",
+    "EXPECTED_ROLES": ["admin", "producer", "legal"]
+  },
+  "database": {
+    "check": true,
+    "mode": "data_api",
+    "testQuery": "SELECT NOW() as now",
+    "requiredTables": ["users", "productions", "contracts"]
+  },
+  "apis": {
+    "health": "/health",
+    "endpoints": [
+      { "path": "/api/contracts", "method": "GET", "expect": 200 },
+      { "path": "/api/contracts", "method": "POST", "body": {"production_id": null,"type":"QC Trial","party":"QC Bot","amount": 1}, "expect": 201 },
+      { "path": "/api/productions", "method": "GET", "expect": 200, "optional": true }
+    ]
+  },
+  "ui": {
+    "routes": [
+      { "path": "/", "title": "Home" },
+      { "path": "/dashboard", "title": "Dashboard" },
+      { "path": "/contracts", "title": "Contracts" },
+      { "path": "/productions", "title": "Productions" },
+      { "path": "/settings/billing", "title": "Billing" }
+    ]
+  },
+  "integrations": {
+    "stripe": { "check": true, "requireActivePrices": true, "minPrices": 1 },
+    "gemini": { "check": true, "prompt": "ping", "expectContains": "" },
+    "google": { "check": false }
+  }
+}
+
+2) Librerías de chequeo
+
+/qc/lib/checks.ts
+
+import 'dotenv/config';
+
+type FetchLike = typeof fetch;
+
+export async function checkNeonDataAPI(fetcher: FetchLike, url?: string, key?: string, testQuery?: string) {
+  if (!url || !key) return { ok:false, error:"NEON_DATA_API_URL/KEY missing" };
+  const r = await fetcher(url, {
+    method: "POST",
+    headers: { "Authorization": `Bearer ${key}`, "Content-Type":"application/json" },
+    body: JSON.stringify({ sql: testQuery || "SELECT 1 as ok" })
+  });
+  if (!r.ok) return { ok:false, status:r.status, error: await r.text() };
+  const data = await r.json();
+  return { ok:true, rows: data?.rows };
+}
+
+export async function checkTables(fetcher: FetchLike, url: string, key: string, requiredTables: string[]) {
+  const r = await fetcher(url, {
+    method: "POST",
+    headers: { "Authorization": `Bearer ${key}`, "Content-Type":"application/json" },
+    body: JSON.stringify({ sql: `SELECT table_name FROM information_schema.tables WHERE table_schema='public'` })
+  });
+  if (!r.ok) return { ok:false, status:r.status, error: await r.text() };
+  const data = await r.json(); const names = new Set((data?.rows||[]).map((x:any)=>x.table_name));
+  const missing = requiredTables.filter(t => !names.has(t));
+  return { ok: missing.length===0, missing, present:[...names] };
+}
+
+export async function checkEndpoint(fetcher: FetchLike, baseUrl: string, ep: any) {
+  const url = baseUrl.replace(/\/$/,'') + ep.path;
+  const opt: any = { method: ep.method || 'GET', headers: { 'Content-Type':'application/json' } };
+  if (ep.body) opt.body = JSON.stringify(ep.body);
+  const res = await fetcher(url, opt);
+  const txt = await res.text();
+  const pass = ep.expect ? (res.status === ep.expect) : res.ok;
+  return { path: ep.path, method: ep.method||'GET', status: res.status, pass, body: safeJson(txt) };
+}
+
+export async function checkRouteReachable(fetcher: FetchLike, baseUrl: string, route: any) {
+  const url = baseUrl.replace(/\/$/,'') + route.path;
+  const res = await fetcher(url);
+  const ok = res.ok;
+  return { path: route.path, status: res.status, ok };
+}
+
+export async function checkStripe(stripeKey?: string, minPrices=1) {
+  if (!stripeKey) return { ok:false, error:"STRIPE_API_KEY missing" };
+  const Stripe = (await import('stripe')).default;
+  const stripe = new Stripe(stripeKey, { apiVersion: '2024-06-20' });
+  const products = await stripe.products.list({ active: true, limit: 100 });
+  const prices   = await stripe.prices.list({ active: true, limit: 100 });
+  const ok = (prices.data?.length || 0) >= minPrices;
+  return { ok, products: products.data.length, prices: prices.data.length, samplePrice: prices.data[0]?.id || null };
+}
+
+export async function checkGemini(apiKey?: string, prompt="ping") {
+  if (!apiKey) return { ok:false, error:"GEMINI_API_KEY missing" };
+  const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+apiKey, {
+    method:"POST", headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ contents:[{ role:"user", parts:[{ text: prompt }] }] })
+  });
+  if (!res.ok) return { ok:false, status:res.status, error: await res.text() };
+  const data = await res.json();
+  return { ok:true, output: data?.candidates?.[0]?.content?.parts?.[0]?.text || "" };
+}
+
+function safeJson(s:string){ try{ return JSON.parse(s); }catch{ return s; } }
+
+
+/qc/lib/report.ts
+
+export type QCReport = {
+  appName: string;
+  timestamp: string;
+  database: any;
+  tables: any;
+  apis: any;
+  ui: any;
+  integrations: any;
+  summary: { ok: boolean; passed: string[]; warnings: string[]; errors: string[]; };
+};
+
+export function summarize(report: QCReport): QCReport {
+  const pass:string[] = [], warn:string[] = [], err:string[] = [];
+
+  // DB
+  if (!report.database?.ok) err.push("Database connection failed");
+  if (report.tables?.missing?.length) warn.push(`Missing tables: ${report.tables.missing.join(', ')}`);
+
+  // APIs
+  for (const ep of (report.apis?.endpoints || [])) {
+    if (!ep.pass && !ep.optional) err.push(`API ${ep.method} ${ep.path} → ${ep.status}`);
+    else if (!ep.pass && ep.optional) warn.push(`API (optional) ${ep.method} ${ep.path} → ${ep.status}`);
+    else pass.push(`API ${ep.method} ${ep.path}`);
+  }
+
+  // UI
+  for (const r of (report.ui?.routes || [])) {
+    if (!r.ok) err.push(`Route ${r.path} not reachable (${r.status})`);
+    else pass.push(`Route ${r.path}`);
+  }
+
+  // Integrations
+  if (report.integrations?.stripe && !report.integrations.stripe.ok) warn.push("Stripe: missing active prices");
+  if (report.integrations?.gemini && !report.integrations.gemini.ok) warn.push("Gemini: test failed");
+
+  const ok = err.length === 0;
+  report.summary = { ok, passed: pass, warnings: warn, errors: err };
+  return report;
+}
+
+export function toMarkdown(r: QCReport): string {
+  const head = `# QC Report — ${r.appName}\n\n**Timestamp:** ${r.timestamp}\n\n`;
+  const db = `## Database\n- Connected: **${r.database?.ok ? 'YES' : 'NO'}**\n- Tables missing: ${r.tables?.missing?.length ? r.tables.missing.join(', ') : 'None'}\n\n`;
+  const ap = `## APIs\n${(r.apis?.endpoints||[]).map((e:any)=>`- ${e.method} ${e.path} → ${e.status} ${e.pass?'✅':'❌'}`).join('\n')}\n\n`;
+  const ui = `## UI Routes\n${(r.ui?.routes||[]).map((x:any)=>`- ${x.path} → ${x.ok?'✅':'❌'} (${x.status})`).join('\n')}\n\n`;
+  const integ = `## Integrations\n- Stripe: ${r.integrations?.stripe?.ok?'OK ✅':'Check ⚠️'} (products: ${r.integrations?.stripe?.products||0}, prices: ${r.integrations?.stripe?.prices||0})\n- Gemini: ${r.integrations?.gemini?.ok?'OK ✅':'Check ⚠️'}\n\n`;
+  const sum = `## Summary\n- **Overall:** ${r.summary.ok?'READY ✅':'ISSUES ❌'}\n- Passed: ${r.summary.passed.length}\n- Warnings: ${r.summary.warnings.length}\n- Errors: ${r.summary.errors.length}\n\n### Errors\n${r.summary.errors.map(x=>`- ${x}`).join('\n') || '- None'}\n\n### Warnings\n${r.summary.warnings.map(x=>`- ${x}`).join('\n') || '- None'}\n`;
+  return head+db+ap+ui+integ+sum;
+}
+
+3) Runner (el “megacron”)
+
+/qc/qc.ts
+
+import 'dotenv/config';
+import fs from 'fs';
+import path from 'path';
+import { checkNeonDataAPI, checkTables, checkEndpoint, checkRouteReachable, checkStripe, checkGemini } from './lib/checks';
+import { summarize, toMarkdown, QCReport } from './lib/report';
+
+const fetcher = fetch;
+
+async function main() {
+  const cfgPath = path.join(process.cwd(), 'qc', 'qc.config.json');
+  const cfg = JSON.parse(fs.readFileSync(cfgPath,'utf8'));
+
+  const appName = cfg.appName || process.env.APP_NAME || 'Unnamed App';
+  const API_BASE = cfg.env?.API_BASE_URL || process.env.API_BASE_URL || 'http://localhost:5000';
+  const BASE_URL = cfg.env?.BASE_URL || process.env.BASE_URL || API_BASE;
+
+  const report: QCReport = {
+    appName, timestamp: new Date().toISOString(),
+    database: {}, tables: {}, apis: {}, ui: {}, integrations: {}, summary: { ok:false, passed:[], warnings:[], errors:[] }
+  };
+
+  // 1) DB checks (Neon Data API)
+  if (cfg.database?.check) {
+    if ((cfg.database.mode || cfg.env?.NEON_MODE) === 'data_api') {
+      const db = await checkNeonDataAPI(fetcher, process.env.NEON_DATA_API_URL, process.env.NEON_DATA_API_KEY, cfg.database.testQuery);
+      report.database = db;
+      if (db.ok && cfg.database.requiredTables?.length) {
+        report.tables = await checkTables(fetcher, process.env.NEON_DATA_API_URL!, process.env.NEON_DATA_API_KEY!, cfg.database.requiredTables);
+      }
+    } else {
+      report.database = { ok:false, error:"Driver mode not implemented in this runner (use data_api)" };
+    }
+  }
+
+  // 2) APIs
+  const healthEP = cfg.apis?.health ? await checkEndpoint(fetcher, API_BASE, { path: cfg.apis.health, method: 'GET', expect:200 }) : null;
+  const apiResults = [];
+  if (cfg.apis?.endpoints) {
+    for (const ep of cfg.apis.endpoints) {
+      apiResults.push(await checkEndpoint(fetcher, API_BASE, ep));
+    }
+  }
+  report.apis = { health: healthEP, endpoints: apiResults };
+
+  // 3) UI routes
+  const routes = [];
+  if (cfg.ui?.routes) {
+    for (const r of cfg.ui.routes) routes.push(await checkRouteReachable(fetcher, BASE_URL, r));
+  }
+  report.ui = { routes };
+
+  // 4) Integrations
+  const integ:any = {};
+  if (cfg.integrations?.stripe?.check) integ.stripe = await checkStripe(process.env.STRIPE_API_KEY, cfg.integrations.stripe.minPrices || 1);
+  if (cfg.integrations?.gemini?.check) integ.gemini = await checkGemini(process.env.GEMINI_API_KEY, cfg.integrations.gemini.prompt || 'ping');
+  report.integrations = integ;
+
+  // 5) Summarize + write outputs
+  summarize(report);
+  fs.writeFileSync(path.join(process.cwd(),'qc-report.json'), JSON.stringify(report, null, 2));
+  fs.writeFileSync(path.join(process.cwd(),'qc-report.md'), toMarkdown(report));
+
+  // Pretty console output
+  console.log('\n==== QC SUMMARY ====');
+  console.log(toMarkdown(report));
+
+  // exit code for CI
+  process.exitCode = report.summary.ok ? 0 : 1;
+}
+
+main().catch(e => { console.error(e); process.exit(1); });
+
+
+Scripts en package.json:
+
+{
+  "scripts": {
+    "qc": "ts-node qc/qc.ts"
+  }
+}
+
+4) Cómo correrlo (local/Replit)
+
+Ajusta qc/qc.config.json (BASE_URL, endpoints, rutas, etc.)
+
+Asegura secrets:
+
+NEON_DATA_API_URL, NEON_DATA_API_KEY
+
+STRIPE_API_KEY (si aplica)
+
+GEMINI_API_KEY (si aplica)
+
+Ejecuta:
+
+npm run qc
+
+
+Salida:
+
+qc-report.json (máquina)
+
+qc-report.md (humano) — cópialo al chat para revisión.
+
+5) Cron en GitHub Actions (no Docker)
+
+.github/workflows/qc-cron.yml
+
+name: QC Megacron
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 14 * * *"   # todos los días 07:00 PDT (14:00 UTC aprox.)
+
+jobs:
+  qc:
+    runs-on: ubuntu-latest
+    env:
+      NEON_DATA_API_URL: ${{ secrets.NEON_DATA_API_URL }}
+      NEON_DATA_API_KEY: ${{ secrets.NEON_DATA_API_KEY }}
+      STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      BASE_URL: ${{ secrets.BASE_URL }}
+      API_BASE_URL: ${{ secrets.API_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: npm run qc
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qc-report
+          path: |
+            qc-report.json
+            qc-report.md
+
+
+Tip: agrega este mismo workflow a cada repo/app con sus Secrets propios → tendrás un panel de reports por app.

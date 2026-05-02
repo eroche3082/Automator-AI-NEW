@@ -1,0 +1,96 @@
+MEGACOMMAND — Firebase Hosting + Functions (TS) + Neon Data API (Generic)
+# 1. Initialize Firebase Hosting + Functions with TypeScript
+firebase init functions hosting --force \
+  --project <YOUR_FIREBASE_PROJECT_ID> \
+  --public dist \
+  --language typescript \
+  --region us-central1 \
+  --eslint --yes
+
+cd functions
+
+# 2. Install dependencies
+npm i express
+npm i -D @types/express
+
+# 3. Create Neon Data API helper
+cat > src/neonDataApi.ts <<'EOF'
+import * as functions from "firebase-functions";
+
+export async function sql<T=any>(query: string, params: any[] = []) {
+  const cfg = functions.config();
+  const apiUrl = cfg?.neon?.url;
+  const apiKey = cfg?.neon?.key;
+
+  if (!apiUrl || !apiKey) {
+    throw new Error("Missing Neon Data API config. Set with: firebase functions:config:set neon.url=... neon.key=...");
+  }
+
+  const r = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ sql: query, params })
+  });
+
+  if (!r.ok) throw new Error(await r.text());
+  const data = await r.json();
+  return data?.rows as T[];
+}
+EOF
+
+# 4. Create Express API using Neon Data API
+cat > src/index.ts <<'EOF'
+import * as functions from "firebase-functions";
+import express from "express";
+import { sql } from "./neonDataApi";
+
+const app = express();
+app.use(express.json());
+
+app.get("/health", async (_req, res) => {
+  const r = await sql<{ now: string }>("SELECT NOW() as now");
+  res.json({ ok: true, now: r[0]?.now });
+});
+
+app.get("/api/contracts", async (_req, res) => {
+  const r = await sql("SELECT * FROM contracts ORDER BY created_at DESC LIMIT 50");
+  res.json(r);
+});
+
+app.post("/api/contracts", async (req, res) => {
+  const { production_id, type, party, amount } = req.body;
+  const r = await sql(
+    "INSERT INTO contracts (production_id, type, party, amount) VALUES ($1,$2,$3,$4) RETURNING *",
+    [production_id, type, party, amount]
+  );
+  res.status(201).json(r[0]);
+});
+
+export const api = functions.region("us-central1").https.onRequest(app);
+EOF
+
+cd ..
+
+# 5. Update firebase.json for Hosting rewrites
+cat > firebase.json <<'EOF'
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": ["**/.*", "**/node_modules/**"],
+    "rewrites": [
+      { "source": "/api/**", "function": "api" },
+      { "source": "/health", "function": "api" },
+      { "source": "**", "destination": "/index.html" }
+    ]
+  }
+}
+EOF
+
+# 6. Deploy Neon secrets into Firebase Functions
+firebase functions:config:set neon.url="https://<YOUR_NEON_PROJECT>.neon.tech/sql" neon.key="<YOUR_NEON_API_KEY>"
+
+# 7. Deploy everything 🚀
+firebase deploy --only hosting,functions

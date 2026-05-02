@@ -1,0 +1,269 @@
+UNIVERSAL MEGAPROMPT — Stripe LIVE Health + Payment Links (per app)
+
+ROLE
+You are a senior full-stack implementer & QA auditor. Your job is to:
+
+Confirm each application is properly connected to Stripe LIVE (not test).
+
+Ensure LIVE Secret/Publishable keys are present, valid, and used by the app.
+
+(If allowed) Create Products/Prices and Payment Links via Stripe API.
+
+Produce a concise health report with checkmarks ✅, links, and evidence (IDs, screenshots/logs).
+
+APPS IN SCOPE
+List the apps you are assigned to (e.g., JETZZ, SKYLITH, Aurora, Contracts Hub, WP frontends, etc.). Treat each app independently but follow this exact playbook.
+
+PHASE 0 — Environment Inventory (Required)
+
+ Collect and print current env vars (mask the sensitive values):
+
+STRIPE_SECRET_KEY (must be sk_live_*)
+
+STRIPE_PUBLISHABLE_KEY (must be pk_live_*)
+
+Optional per app:
+
+STRIPE_WEBHOOK_SECRET (if webhooks already configured)
+
+STRIPE_API_VERSION (pin to 2023-10-16 or newer)
+
+ Confirm how env vars are loaded (Replit Secrets / Firebase / Cloud Run).
+
+ Confirm the default currency and locale intended for this app.
+
+Output: a short table (App → key names → present? ✅/❌ → value prefix).
+
+PHASE 1 — Stripe LIVE Connectivity Check (No writes)
+
+Use the LIVE secret key from this app and validate:
+
+Retrieve account
+
+curl https://api.stripe.com/v1/account \
+  -u $STRIPE_SECRET_KEY:
+
+
+Expect charges_enabled: true, details_submitted: true, and a real id like acct_....
+
+List existing products (first 3)
+
+curl https://api.stripe.com/v1/products?limit=3 -u $STRIPE_SECRET_KEY:
+
+
+Validate HTTP 200 and items (may be empty if new).
+
+Assert mode is LIVE
+
+Keys must start with sk_live_ and responses must show your real business name.
+
+Record account.id, business_profile.name.
+
+Output: paste the 3 response snippets (sanitized), status codes, and ✅/❌ verdict.
+
+PHASE 2 — App Wiring Sanity (Frontend/Backend)
+
+ Frontend uses pk_live_* (search the code / config).
+
+ Backend only uses sk_live_* (never exposed).
+
+ No references to test keys in code/build artifacts.
+
+ If the app renders Stripe UI (Payment Element/Checkout from code, not Payment Link): ensure Payment Method Domains include the domain (skip if Payment Links only).
+
+ CORS/Allowed origins include the app’s domain(s).
+
+Output: list file paths or env loaders and screenshots/log lines proving LIVE keys are used.
+
+PHASE 3 — Create Products/Prices & Payment Links (API)
+
+Only perform if ALLOW_CREATE=true for the app.
+Use idempotency keys and namespaces so we don’t duplicate catalog entries.
+
+3.1 Node script (Replit-ready) to create or reuse catalog + links
+
+Create stripe_links.ts (or .js) and run with the app’s LIVE secret:
+
+/**
+ * Usage:
+ *   STRIPE_SECRET_KEY=sk_live_xxx npx ts-node stripe_links.ts --app JETZZ --plans basic=1900/mo pro=4900/mo elite=9900/mo --success https://jetzz.socialbrands.ai/thanks --cancel https://jetzz.socialbrands.ai/cancel
+ *
+ * Notes:
+ * - Idempotent by name: if product/price exists, it reuses it.
+ * - Creates/returns Payment Links for each plan.
+ */
+import Stripe from "stripe";
+import crypto from "crypto";
+
+const args = process.argv.join(" ");
+const appName = /--app\s+(\S+)/.exec(args)?.[1] || "APP";
+const successUrl = /--success\s+(\S+)/.exec(args)?.[1] || "https://socialbrands.ai/success";
+const cancelUrl  = /--cancel\s+(\S+)/.exec(args)?.[1] || "https://socialbrands.ai/cancel";
+const plansArg   = /--plans\s+([^]+)$/.exec(args)?.[1] || ""; // e.g. "basic=1900/mo pro=4900/mo"
+const planDefs   = Array.from(plansArg.matchAll(/(\w+)=([0-9]+)\/(mo|yr)/g));
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2023-10-16" });
+
+async function ensureProduct(name: string) {
+  const search = await stripe.products.search({ query: `name:"${name}" AND active:'true'` });
+  if (search.data[0]) return search.data[0];
+  return stripe.products.create({ name, active: true }, { idempotencyKey: "prod_" + crypto.randomUUID() });
+}
+
+async function ensurePrice(product: string, unit: number, interval: "month"|"year") {
+  const list = await stripe.prices.list({ product, active: true, limit: 100 });
+  const found = list.data.find(p => p.unit_amount === unit && p.recurring?.interval === interval);
+  if (found) return found;
+  return stripe.prices.create({
+    product, currency: "usd", unit_amount: unit, recurring: { interval }
+  }, { idempotencyKey: "price_" + crypto.randomUUID() });
+}
+
+async function ensurePaymentLink(priceId: string) {
+  // Reuse if already created with same price (best-effort: fetch latest link with that price)
+  const links = await stripe.paymentLinks.list({ limit: 100 });
+  const existing = links.data.find(l => l.line_items?.some(li => (li.price as any)?.id === priceId));
+  if (existing) return existing;
+  return stripe.paymentLinks.create({
+    line_items: [{ price: priceId, quantity: 1 }],
+    after_completion: { type: "redirect", redirect: { url: successUrl } },
+    metadata: { app: appName }
+  }, { idempotencyKey: "plink_" + crypto.randomUUID() });
+}
+
+(async () => {
+  console.log(`== Stripe LIVE Payment Links for ${appName} ==`);
+  for (const m of planDefs) {
+    const plan = m[1]; const cents = parseInt(m[2], 10); const per = m[3] === "mo" ? "month" : "year";
+    const productName = `${appName} — ${plan.toUpperCase()} Subscription`;
+    const product = await ensureProduct(productName);
+    const price   = await ensurePrice(product.id, cents, per as any);
+    const plink   = await ensurePaymentLink(price.id);
+    console.log(`[${plan}] product=${product.id} price=${price.id} link=${plink.url}`);
+  }
+})();
+
+
+Run examples:
+
+# JETZZ monthly plans
+STRIPE_SECRET_KEY=sk_live_xxx npx ts-node stripe_links.ts \
+  --app JETZZ \
+  --plans "basic=1900/mo pro=4900/mo elite=9900/mo" \
+  --success https://jetzz.socialbrands.ai/thanks \
+  --cancel https://jetzz.socialbrands.ai/cancel
+
+
+Expected output: one line per plan with product=… price=… link=https://buy.stripe.com/....
+
+If you prefer curl only: first POST /v1/products, then POST /v1/prices, then POST /v1/payment_links. Always pass -H "Idempotency-Key: <uuid>".
+
+PHASE 4 — Wire the Links into the App
+
+ Replace “Buy/Subscribe” buttons with the generated Payment Link URLs.
+
+ For “Manage Billing”, use Stripe Customer Portal (optional) or keep it out for now.
+
+ Confirm buttons render and open checkout.stripe.com with your branding.
+
+Output: page/route where links were added + screenshot.
+
+PHASE 5 — Confirmation Mode (Manual first, Webhook later)
+
+Manual (today)
+
+ Ensure email notifications from Stripe are on.
+
+ Document the manual activation flow (who flips the plan in your DB/Admin).
+
+Webhook (later)
+
+ Record the intended webhook URL (central Payments/Contracts Hub preferred).
+
+ List the events to enable: checkout.session.completed, customer.subscription.*, invoice.*, payment_intent.*.
+
+ Confirm the app will rely on claims/flags once automation is enabled.
+
+PHASE 6 — Final Health Report (per app)
+
+Produce a short Markdown table like this:
+
+# Stripe LIVE Health — <APP_NAME>
+
+| Check                                  | Result | Evidence |
+|----------------------------------------|--------|----------|
+| LIVE keys present (sk_live/pk_live)    | ✅     | env listed (prefix masked) |
+| /v1/account 200, charges_enabled=true  | ✅     | acct_... |
+| Product/Price created or reused        | ✅     | prod_..., price_... |
+| Payment Link generated                 | ✅     | https://buy.stripe.com/xxxx |
+| Buttons wired to Payment Link          | ✅     | screenshot URL |
+| Manual activation SOP ready            | ✅     | doc link |
+| Webhook plan (URL + events)            | ⚠️     | will attach later |
+
+
+Also return a JSON blob:
+
+{
+  "app": "JETZZ",
+  "account_id": "acct_xxx",
+  "products": [{"name":"JETZZ — PRO Subscription","id":"prod_x"}],
+  "prices": [{"id":"price_x","interval":"month","amount":4900}],
+  "payment_links": [{"plan":"pro","url":"https://buy.stripe.com/xyz"}],
+  "env": {"secret_key":"sk_live_***","publishable_key":"pk_live_***"},
+  "webhook": {"planned_url":"https://payments.socialbrands.ai/webhooks/stripe","events":["checkout.session.completed","customer.subscription.updated"]}
+}
+
+SAFETY / GUARDRAILS
+
+Always use LIVE keys (check prefixes).
+
+Use Idempotency-Key for all create calls.
+
+Never log full secrets; mask values.
+
+Don’t create duplicate products/prices; the script reuses by name/amount/interval.
+
+If a plan already exists in Stripe Dashboard, the script should reuse and only create the Payment Link.
+
+ACCEPTANCE CRITERIA (per app)
+
+LIVE connectivity proven (/v1/account ✅).
+
+Keys correctly mounted and used by the app.
+
+At least one Payment Link created & wired (per plan in scope).
+
+Final health table + JSON summary delivered.
+
+No test keys or mock data remain.
+
+OPTIONAL: Quick curl for Payment Link (single plan)
+# 1) Product
+curl -X POST https://api.stripe.com/v1/products \
+  -u $STRIPE_SECRET_KEY: \
+  -H "Idempotency-Key: $(uuidgen)" \
+  -d "name=SKYLITH — PRO Subscription"
+
+# 2) Price
+curl -X POST https://api.stripe.com/v1/prices \
+  -u $STRIPE_SECRET_KEY: \
+  -H "Idempotency-Key: $(uuidgen)" \
+  -d currency=usd -d unit_amount=4900 -d "recurring[interval]=month" \
+  -d product=prod_xxx
+
+# 3) Payment Link
+curl -X POST https://api.stripe.com/v1/payment_links \
+  -u $STRIPE_SECRET_KEY: \
+  -H "Idempotency-Key: $(uuidgen)" \
+  -d "line_items[0][price]=price_xxx" \
+  -d "line_items[0][quantity]=1"
+
+What this gives you
+
+One repeatable check to prove every app is truly LIVE with Stripe.
+
+Automatic creation of Products/Prices and Payment Links from Replit.
+
+Clean, copy-paste-ready report your agents can deliver with ✅’s.
+
+Future-proof: when you’re ready, just point a single webhook (Payments/Contracts Hub) to automate plan activation.

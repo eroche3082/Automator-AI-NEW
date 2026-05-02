@@ -1,0 +1,185 @@
+MEGAPROMPT — TypeScript + Neon (PostgreSQL) — Generic Setup for Any App/Agent
+
+ROLE
+You are a DevOps + Full-Stack Agent. Your mission is to connect this project to a Neon PostgreSQL database using TypeScript, validate connectivity, and keep the codebase ORM-ready (Prisma/Drizzle compatible).
+
+INPUTS (replace as needed)
+
+DATABASE_URL = postgresql://<user>:<pass>@<host>/<db>?sslmode=require (Neon connection string)
+
+App root uses Node.js + TypeScript (or install it below)
+
+OBJECTIVES
+
+Install all PostgreSQL dependencies for TypeScript.
+
+Configure .env (or Replit Secrets) with DATABASE_URL.
+
+Create src/lib/db.ts with a production-safe Neon connection.
+
+Verify the database connection via src/testConnection.ts.
+
+Keep compatibility for future Prisma/Drizzle integration.
+
+⚙️ EXECUTION — STEP BY STEP
+🔹 1) Install dependencies
+npm install pg
+npm install -D typescript ts-node @types/node @types/pg
+
+
+If TypeScript isn’t initialized yet:
+
+npx tsc --init
+
+
+(Optional but recommended in package.json)
+
+{
+  "engines": { "node": "20" },
+  "scripts": {
+    "db:test": "ts-node src/testConnection.ts"
+  }
+}
+
+🔹 2) Configure environment variable
+
+Set DATABASE_URL in Replit Secrets or a local .env:
+
+DATABASE_URL=postgresql://<user>:<pass>@<host>/<db>?sslmode=require
+
+
+Never commit real credentials. Use Secrets in CI/CD too.
+
+🔹 3) Create the connection file db.ts
+
+Location: src/lib/db.ts
+
+import { Pool } from 'pg';
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  // Neon requires SSL; this setting keeps TS/Node happy in serverless envs
+  ssl: { rejectUnauthorized: false },
+});
+
+export default pool;
+
+🔹 4) Create a test script to validate connectivity
+
+File: src/testConnection.ts
+
+import pool from './lib/db';
+
+async function main() {
+  try {
+    const result = await pool.query('SELECT NOW() AS now');
+    console.log('✅ Connected to Neon. Server time:', result.rows[0].now);
+  } catch (err) {
+    console.error('❌ Neon connection error:', err);
+    process.exitCode = 1;
+  } finally {
+    await pool.end();
+  }
+}
+
+main();
+
+
+Run:
+
+npx ts-node src/testConnection.ts
+
+
+Expected output (example):
+✅ Connected to Neon. Server time: 2025-08-31T08:12:00Z
+
+🔹 5) Initial SQL (run once in Neon SQL Editor)
+
+Use this sample or replace with app-specific tables. Keep pgcrypto if you need gen_random_uuid().
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Users (link to Firebase UID if applicable)
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  firebase_uid TEXT UNIQUE,
+  full_name TEXT,
+  email TEXT,
+  role TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Productions (sample domain entity)
+CREATE TABLE IF NOT EXISTS productions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  description TEXT,
+  status TEXT DEFAULT 'planning',
+  budget NUMERIC,
+  created_by UUID REFERENCES users(id),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Contracts (sample domain entity)
+CREATE TABLE IF NOT EXISTS contracts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  production_id UUID REFERENCES productions(id),
+  type TEXT,
+  party TEXT,
+  amount NUMERIC,
+  signed BOOLEAN DEFAULT FALSE,
+  signed_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+✅ EXPECTED END STATE
+
+src/lib/db.ts ready and secured (SSL enabled).
+
+Neon connection validated via src/testConnection.ts.
+
+Base tables created (or your app’s schema).
+
+Project remains ORM-ready (Prisma/Drizzle can be added later without refactoring).
+
+🔁 OPTIONAL — Prisma/Drizzle Ready (keep for later)
+Prisma quick scaffold
+npm i prisma @prisma/client
+npx prisma init
+# set DATABASE_URL in .env, then:
+npx prisma db push
+npx prisma generate
+
+Drizzle quick scaffold
+npm i drizzle-orm pg
+npm i -D drizzle-kit
+# configure drizzle.config.ts and run:
+npx drizzle-kit generate
+
+⚡ ONE-LINER (Agent mode)
+
+If you want the agent to do everything in one go (assumes TS initialized):
+
+npm i pg && npm i -D typescript ts-node @types/node @types/pg && \
+mkdir -p src/lib && cat > src/lib/db.ts <<'EOF'
+import { Pool } from 'pg';
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
+export default pool;
+EOF
+&& mkdir -p src && cat > src/testConnection.ts <<'EOF'
+import pool from './lib/db';
+async function main() {
+  try { const r = await pool.query('SELECT NOW() AS now');
+    console.log('✅ Connected to Neon. Server time:', r.rows[0].now);
+  } catch (e) { console.error('❌ Neon connection error:', e); process.exitCode=1; }
+  finally { await pool.end(); }
+}
+main();
+EOF
+&& node -e "const fs=require('fs');const p='package.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));j.scripts=j.scripts||{};j.scripts['db:test']='ts-node src/testConnection.ts';fs.writeFileSync(p,JSON.stringify(j,null,2));console.log('✅ scripts updated');"
+
+
+Ensure DATABASE_URL is set in Secrets before running npm run db:test.

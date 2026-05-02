@@ -1,0 +1,156 @@
+í, he aplicado el estilo completo basado en la guía visual que proporcionaste. Veo que la aplicación está funcionando correctamente según los logs de Vite que muestran todas las actualizaciones en tiempo real.
+
+Los cambios aplicados incluyen:
+
+✅ Sistema de colores completo implementado:
+
+Gradiente principal: #0047FF → #D100FF → #FF3E3E
+Fondo base: #0E0E0E (Black Matte) para dark mode
+Tarjetas de superficie: #151515 con sombras suaves
+Texto primario: #FFFFFF
+Texto secundario: #D1D1D1
+✅ Componentes actualizados con el nuevo estilo:
+
+Header con gradiente y efectos de glow
+Sidebar con navegación activa usando el gradiente
+Botones con efectos hover y glow púrpura
+DailyQuote con el estilo de tarjeta mejorado
+Pricing page con diseño premium
+✅ Sistema de utilidades CSS:
+
+.brand-gradient - Gradiente principal
+.gradient-pill - Píldoras con gradiente y hover effects
+.glow-primary, .glow-secondary, .glow-accent - Efectos de brillo
+.enhanced-card - Tarjetas con bordes gradiente
+.gradient-border-top - Bordes superiores con gradiente
+✅ Tema oscuro por defecto implementado según la guía visual
+
+La aplicación está corriendo correctamente en el puerto 5000 y todos los componentes se están actualizando en tiempo real con Vite hot reload. El único problema que veo es que la base de datos PostgreSQL está deshabilitada, pero eso no afecta la visualización del estilo que implementamos.
+
+¿Hay algún componente específico que quieras que revise o ajuste en el estilo?
+
+ok ahora si. dame el sistema completo que estas utilizando de light and dark.
+
+CI
+
+contact2187
+Assistant
+just now
+Te muestro el sistema completo de light/dark theme que está implementado en tu aplicación:
+
+1. Sistema de Tokens CSS (index.css)
+El sistema usa CSS Custom Properties con dos esquemas de color:
+
+Variables CSS Base:
+:root {
+  /* Light mode */
+  --background: 0 0% 100%;           /* Blanco puro */
+  --foreground: 222.2 84% 4.9%;      /* Texto oscuro */
+  --primary: 224 100% 50%;           /* #0047FF - Azul eléctrico */
+  --secondary: 281 100% 50%;         /* #D100FF - Violeta/Rosa */
+  --accent: 0 100% 62%;              /* #FF3E3E - Rojo legal */
+}
+.dark {
+  /* Dark mode */
+  --background: 240 6% 5%;           /* #0E0E0E - Negro mate */
+  --foreground: 0 0% 100%;           /* #FFFFFF - Blanco */
+  --card: 240 4% 8%;                 /* #151515 - Tarjetas superficie */
+  --muted-foreground: 0 0% 82%;      /* #D1D1D1 - Texto secundario */
+}
+2. Hook de Gestión del Tema (use-theme.ts)
+import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
+export function useThemeToggle() {
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  if (!mounted) {
+    return {
+      theme: "light",
+      setTheme: () => {},
+      isDark: false,
+      toggleTheme: () => {},
+    };
+  }
+  const isDark = theme === "dark" || resolvedTheme === "dark";
+  const toggleTheme = () => {
+    setTheme(isDark ? "light" : "dark");
+  };
+  return { theme, setTheme, isDark, toggleTheme };
+}
+3. Componente Switcher (ThemeSwitcher.tsx)
+import { Button } from "@/components/ui/button";
+import { useThemeToggle } from "@/hooks/use-theme";
+import { SunIcon, MoonIcon } from "lucide-react";
+export function ThemeSwitcher() {
+  const { isDark, toggleTheme } = useThemeToggle();
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={toggleTheme}
+      aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
+    >
+      {isDark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+    </Button>
+  );
+}
+4. Configuración Tailwind (tailwind.config.ts)
+Los colores están mapeados a las variables CSS:
+
+colors: {
+  background: "hsl(var(--background))",
+  foreground: "hsl(var(--foreground))",
+  primary: {
+    DEFAULT: "hsl(var(--primary))",
+    "500": "#0047FF", // Azul eléctrico
+  },
+  secondary: {
+    DEFAULT: "hsl(var(--secondary))", 
+    "500": "#D100FF", // Violeta/Rosa
+  },
+  accent: {
+    DEFAULT: "hsl(var(--accent))",
+    "500": "#FF3E3E", // Rojo legal
+  },
+}
+5. Radio Group en Settings (Settings.tsx)
+<RadioGroup
+  value={formState.theme}
+  onValueChange={(value) => {
+    setFormState({...formState, theme: value});
+    setTheme(value); // Aplica tema inmediatamente
+  }}
+  className="grid grid-cols-2 gap-4 pt-2"
+>
+  <div>
+    <RadioGroupItem value="light" id="light" className="peer sr-only" />
+    <Label htmlFor="light" className="flex items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary">
+      <Sun className="h-5 w-5 mr-2" />
+      Light Mode
+    </Label>
+  </div>
+  <div>
+    <RadioGroupItem value="dark" id="dark" className="peer sr-only" />
+    <Label htmlFor="dark" className="flex items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary">
+      <Moon className="h-5 w-5 mr-2" />
+      Dark Mode
+    </Label>
+  </div>
+</RadioGroup>
+6. Gradientes Personalizados
+/* Gradiente principal de marca */
+.brand-gradient {
+  background: linear-gradient(to right, #0047FF, #D100FF, #FF3E3E);
+}
+.brand-gradient-text {
+  background: linear-gradient(to right, #0047FF, #D100FF, #FF3E3E);
+  background-clip: text;
+  color: transparent;
+}
+/* Efectos de brillo */
+.glow-primary { box-shadow: 0 0 15px rgba(0,71,255,0.5); }
+.glow-secondary { box-shadow: 0 0 15px rgba(209,0,255,0.5); }
+.glow-accent { box-shadow: 0 0 15px rgba(255,62,62,0.5); }

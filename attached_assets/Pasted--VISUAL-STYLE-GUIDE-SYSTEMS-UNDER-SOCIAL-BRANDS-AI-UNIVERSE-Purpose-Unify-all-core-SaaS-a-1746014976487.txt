@@ -1,0 +1,107 @@
+**VISUAL STYLE GUIDE – SYSTEMS UNDER SOCIAL BRANDS AI UNIVERSE**
+
+**Purpose:** Unify all core SaaS applications (SocialAI, Avatar Studio, Automation Hub, Grow Partners, Lead Matrix, Smart Contracts, Live Studio AI) under one cohesive design system—without losing product identity.
+
+---
+
+### **CORE DESIGN DNA** (to apply across all apps):
+
+**1. Typography**
+- **Primary Font:** Inter
+- **Secondary (Optional):** DM Sans / Urbanist
+- Use bold for key stats/headlines, medium for buttons, light for support text.
+
+**2. Color Palette**  
+**Main Gradient:** `#0047FF → #D100FF → #FF3E3E`
+- **Primary Text:** #FFFFFF
+- **Secondary Text:** #D1D1D1
+- **Accent Buttons:** #FF3E3E or full gradient
+- **Background Base:** #0E0E0E (Black Matte)
+- **Surface Cards:** #151515 with soft shadow
+
+**3. Layout & Grid System**
+- 12-column responsive grid
+- Navigation bar on top or left side (shadcn/ui style)
+- Tabs layout with fluid transitions between subtabs
+- Cards for metrics, activity logs, and visuals
+
+**4. Button & Element Design**
+- Pill-shaped buttons with soft gradients
+- Hover: glow border (color-matched to brand)
+- Icon + text pairing (Lucide icons)
+- Loading animations with subtle pulse or shimmer
+
+**5. Hero Text Rules**
+- **Size:** Huge headline with strong contrast (white or gradient)
+- **AI Keyword Highlight:** Gradient applied to "AI", "Automation", "Vision", etc.
+- **Subheading:** Smaller, center-aligned under title (max 2 lines)
+
+**6. Avatar & Visuals**
+- Use cinematic lighting (blue neon or purple backglow)
+- Hero avatars should face forward or at 3/4 angle
+- Embed video or portrait component in home dashboard if applicable
+- Always use avatars in branded clothing matching the app’s palette
+
+---
+
+### **INDIVIDUAL APP ADAPTATIONS** (within style framework):
+
+**SOCIALAI (Content Engine)**  
+- Hero color: #00BFFF (Sky Blue accents)  
+- Icons: Reels, Calendar, Analytics
+- Visuals: Overlapping content blocks, motion blur elements
+
+**AVATAR STUDIO**  
+- Hero color: #D100FF (Violet/Pink neon)
+- Avatars as visual centerpiece
+- Studio/workspace layout like design apps
+
+**AUTOMATOR AI**  
+- Hero color: #0047FF (Electric Blue)
+- Workflow cards, toggles, switches visual metaphors
+- Glowing circuitry-style background
+
+**SMART CONTRACTS HUB**  
+- Hero color: #FF3E3E (Legal Red)
+- Use stylized PDF, digital signature, document visuals
+- Balance tech with trust-based visuals (handshake icons, lock icons)
+
+**GROW PARTNERS**  
+- Hero color: Gold gradient (#FFD700 → #FFB347)
+- Charts, link trees, trophy/emblem visuals
+- Affiliate avatars in medal-style framing
+
+**LEAD MATRIX AI**  
+- Hero color: #00FFAB (Mint/Teal)
+- Emotion maps, neural lines, dot paths
+- Emotional gradient glow on segmented user cards
+
+**LIVE STUDIO AI**  
+- Hero color: #8E2DE2 → #4A00E0 (Deep Purple Stream)
+- Streaming overlays, neon glow, retro grid animations
+- Showrunner dashboard UX + highlight reel visuals
+
+---
+
+### **SHARED COMPONENTS TO STANDARDIZE**
+- **Header/Navbar:** Gradient logo left, login/profile right
+- **Chat Support Button:** Floating with Aurora Icon
+- **Avatar Greeting:** "Welcome back, [Name] — Ready to create?"
+- **Metrics Cards:** Always 3-per-row, gradient border top
+- **CTA Buttons:** Top-right corner of each tab or section
+
+---
+
+**EXPORT OPTIONS:**
+- Can be rendered as a reusable Figma template for cloning into each app
+- Can be transformed into reusable React UI component library (`socialbrands-ui-kit`)
+
+---
+
+**Final Notes:**
+All apps must maintain **functional uniqueness** but **visual unity** under the Social Brands AI DNA.
+Visuals must inspire tech futurism, accessibility, and intuitive flow.
+The gradient is your weapon. The font is your voice.
+
+**SOCIAL BRANDS VISUAL CORE ONLINE.**
+

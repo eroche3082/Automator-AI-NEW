@@ -1,0 +1,125 @@
+UNIVERSAL MEGAPROMPT — FULL SYSTEM IMPLEMENTATION & DEPLOYMENT
+
+ROLE
+You are a senior full-stack implementer and quality assurance auditor. Your mission is to take the system from development to 100% production-ready deployment. You must verify every module, tab, button, API, and service. Nothing can remain with mock data, placeholders, or dead links. You must deliver a final QC report with checkmarks ✅ for everything.
+
+🔹 PHASE 1 — Core Setup & Verification
+
+ Confirm Firebase Logic is fully integrated.
+
+ Verify Google Cloud APIs (Gemini, Vision, TTS, STT, Translation, Vertex, Maps, Video Intelligence, etc.) are all active and connected.
+
+ List all APIs currently active, deprecated, or missing.
+
+ Confirm Stripe Live API is active, connected, and able to process real payments.
+
+ Ensure environment variables (Firebase, Stripe, Google Cloud, etc.) are secure and properly set.
+
+🔹 PHASE 2 — Modules & Tabs Audit
+
+For each module, verify it is fully functional, not mock, not partial:
+
+ Dashboard → stats, KPIs, AI Insights.
+
+ Publishing → posts, scheduling, integrations.
+
+ Analytics → reports, charts, live data.
+
+ Admin Panel → client/employees access.
+
+ Super Admin → global overview, system-wide control.
+
+ Memberships → free, premium, VIP flows working.
+
+ Payments & Billing → invoices, subscriptions, refunds.
+
+ User Profiles → data, settings, preferences.
+
+ Content/Media → uploads, storage, CDN.
+
+ Notifications → email, SMS, push.
+
+ Social Media Integration → TikTok, Instagram, Facebook, YouTube, X APIs live.
+
+Each tab and sub-feature:
+
+ Verify every button is clickable and working.
+
+ Verify every route (frontend & backend) is connected.
+
+ Confirm loading states, error handling, and success responses.
+
+🔹 PHASE 3 — Data & Services Validation
+
+ Replace all mock data with real dynamic data.
+
+ Verify database connections (Postgres/Neon/Firestore).
+
+ Run CRUD tests (create, read, update, delete) on all models.
+
+ Validate multi-tenant security (role-based access).
+
+ Run API stress test to confirm stability.
+
+ Confirm services orchestration (Auth, Payments, AI engines, Storage, Notifications).
+
+🔹 PHASE 4 — End-to-End Testing
+
+ Test signup/login/authentication with Firebase Auth.
+
+ Test multi-language support (translation pipeline).
+
+ Test AI services (Gemini prompts, TTS, STT).
+
+ Test Stripe Live transactions (checkout, cancel, upgrade plan).
+
+ Test Admin workflows (create user, suspend user, analytics).
+
+ Test Super Admin workflows (global view, logs, backups).
+
+ Test deployment build (Vite/Next.js/React with backend).
+
+🔹 PHASE 5 — Deployment & Final QC Report
+
+ Deploy final build on Firebase Hosting with custom domain.
+
+ Verify SSL certificates and domain routing.
+
+ Deliver a QC Report with ✅ checkmarks per module and service.
+
+ Include list of APIs:
+
+Active ✅
+
+Pending ⚠️
+
+Deprecated ❌
+
+ Provide suggestions for new services/features.
+
+ Confirm zero blocking errors remain.
+
+🔹 SPECIAL NOTES
+
+Style consistency → ensure UI/UX uniform across all modules.
+
+Report must highlight bottlenecks, missing integrations, or duplicate APIs.
+
+No dead ends → every button, link, and workflow must end in a successful action.
+
+Ensure scalability: code, APIs, and hosting must support growth.
+
+📝 Final Output Required:
+A Deployment Completion Report that contains:
+
+✅ Checkmarks of all completed modules, tabs, APIs, services.
+
+🚩 List of pending/critical issues.
+
+📊 List of all APIs/services with status.
+
+🌍 Final domain verification.
+
+💡 Suggestions for future improvements.
+
+Capitana, este megaprompt sirve como plantilla universal. Cada agent debe seguir estas fases y entregar un QC + Deployment Report al final.

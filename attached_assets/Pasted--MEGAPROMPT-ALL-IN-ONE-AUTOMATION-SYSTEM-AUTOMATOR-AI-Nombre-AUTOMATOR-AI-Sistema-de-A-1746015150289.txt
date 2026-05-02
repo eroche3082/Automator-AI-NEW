@@ -1,0 +1,129 @@
+**MEGAPROMPT – ALL-IN-ONE AUTOMATION SYSTEM (AUTOMATOR AI)**
+
+**Nombre:** AUTOMATOR AI (Sistema de Automatización Total)
+**Propósito:** Plataforma centralizada para automatizar procesos de negocios, gestión de tareas, seguimiento de leads, envío de correos, flujos operativos y conexión con servicios externos.
+
+Ideal para vender como SaaS a empresas, agencias, freelancers y equipos de ventas que buscan optimizar tiempo y escalar sin contratar más personal.
+
+---
+
+**TECNOLOGÍA BASE:**
+- **Frontend:** React + Tailwind + ShadCN/UI
+- **Backend:** Node.js + Express
+- **Base de Datos:** PostgreSQL + Firebase
+- **AI:** Vertex AI 2.5 Pro + Gemini 1.5 Flash
+- **Integraciones activas:**
+  - Google Calendar, Gmail, Google Sheets, Google Docs
+  - Discord, Notion, Trello, Zapier, Webhooks
+  - Stripe, Calendly, CRMs (Hubspot, Zoho)
+  - WhatsApp API, Email SMTP, Cloud Scheduler
+- **Deployment:** Firebase Hosting + Replit Dev
+
+---
+
+**DASHBOARD ESTRUCTURAL (6 TABS)**
+
+1. **Home – Automation Hub**
+   - Bienvenida personalizada por IA
+   - Actividad reciente + tareas automatizadas activas
+   - KPIs clave: procesos, tiempo ahorrado, resultados
+
+2. **Workflows & Triggers**
+   - **Subtabs:**
+     - Crear flujo automático (IF/THEN/ELSE)
+     - Acciones por API (ej. “Enviar Gmail si se completa formulario”)
+     - Webhooks personalizados
+     - Acciones programadas por hora, día, evento
+     - Plantillas de automatización por industria
+
+3. **CRM & Lead Automation**
+   - **Subtabs:**
+     - Base de datos de clientes / leads
+     - Seguimiento automático de intención (mensajes, apertura, clics)
+     - Flujo de onboarding (correo + Docs + Calendly)
+     - Clasificación por tags inteligentes
+     - Notificaciones vía email / WhatsApp / Discord
+
+4. **Email & Document Automation**
+   - **Subtabs:**
+     - Redacción de correos inteligentes con AI
+     - Secuencia de correos activados por eventos
+     - Conexión con Google Docs (contratos, propuestas, reportes)
+     - Generación automática de PDFs y Docs con IA
+     - Firma electrónica e integración con DocuSign
+
+5. **Calendars & Scheduling**
+   - **Subtabs:**
+     - Integración con Google Calendar y Calendly
+     - Agenda inteligente por disponibilidad
+     - Envío automático de invitaciones y recordatorios
+     - Gestión de múltiples calendarios por proyecto
+     - Historial de reuniones + tareas asignadas
+
+6. **Settings & API Manager**
+   - Activar/desactivar integraciones por cliente o equipo
+   - Conectar cuentas (Google, Stripe, Zapier, Discord, etc.)
+   - Clave API por usuario
+   - Notificaciones, idioma, seguridad y backups
+
+---
+
+**30 FEATURES ACTIVADOS:**
+1. Constructor visual de flujos (arrastrar y soltar)
+2. Disparadores por evento, fecha u hora
+3. Respuestas automatizadas por email
+4. Conexión con CRMs externos
+5. Seguimiento de leads con etiquetas y prioridades
+6. Recordatorios automáticos por WhatsApp
+7. Plantillas IA de flujos por industria
+8. Generación automática de Docs con IA
+9. Firma digital integrada (DocuSign / PDF export)
+10. Secuencias de onboarding (email + docs + reuniones)
+11. Activador de flujos por nuevo contacto, compra, click o formulario
+12. Envío automático de propuestas personalizadas
+13. Alertas y tareas por Discord o Telegram
+14. Notas y reportes IA después de llamadas
+15. Dashboard de tareas automatizadas por equipo
+16. Control de permisos por miembro
+17. Detección de bloqueos o cuellos de botella
+18. Sincronización con Zapier + Webhooks
+19. Generación de landing pages con formularios inteligentes
+20. Notificación de pagos o suscripciones nuevas
+21. Conexión con Stripe para pagos recurrentes
+22. Agenda compartida con IA para reuniones perfectas
+23. Asistente virtual integrado para dudas del flujo
+24. Documentación automática de cada proceso
+25. Resumen mensual de automatizaciones y resultados
+26. Modo de simulación de flujos antes de ejecutarlos
+27. Copia de flujos entre cuentas o clientes
+28. Multilenguaje (ENG/ESP)
+29. Activación por voz o mensaje (STT + TTS)
+30. Modo White Label para revender a clientes externos
+
+---
+
+**DISEÑO VISUAL:**
+- Profesional, corporativo, eficiente
+- Colores: negro, blanco, azul eléctrico
+- UX intuitiva para que cualquier usuario lo entienda en 5 minutos
+- Tipografía: Inter, DM Sans
+
+---
+
+**TONO DEL AGENTE:**
+- Formal, resolutivo, experto en productividad
+- Puede actuar como asistente corporativo o técnico IA
+- Genera recomendaciones inteligentes para optimizar flujos
+
+---
+
+**FINAL NOTE TO AGENT:**
+You are AUTOMATOR AI — an enterprise-grade automation system. Your mission is to simplify, accelerate, and streamline operations for creators, teams, and businesses.
+
+Your entire system must be modular, visual, powerful, and exportable.
+Begin activation of all tabs and 30 features now.
+
+Launch with flow building, CRM automation, email generation, document automation, and meeting coordination fully active.
+
+**AUTOMATOR AI ONLINE.**
+

@@ -1,0 +1,66 @@
+modules = ["nodejs-20", "web", "postgresql-16"]
+run = "npm run dev"
+hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+deploymentTarget = "autoscale"
+build = ["sh", "-c", "npm run build"]
+run = ["sh", "-c", "npm run start"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[workflows]
+runButton = "Development Server"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Build & Deploy"
+author = 47286627
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run build"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run start"
+
+[[workflows.workflow]]
+name = "Development Server"
+author = 47286627
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
