@@ -6,7 +6,9 @@ export function useMembership() {
     queryKey: ["/api/me"],
   });
 
-  const planCode = (profile?.plan as "basic" | "pro" | "elite") || "basic";
+  const rawPlan = profile?.plan;
+  const planCode: "basic" | "pro" | "elite" =
+    rawPlan === "pro" || rawPlan === "elite" ? rawPlan : "basic";
   const currentPlan = getPlanByCode(planCode);
 
   const hasFeature = (feature: string): boolean => {
