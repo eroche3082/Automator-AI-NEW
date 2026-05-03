@@ -1,18 +1,70 @@
 import express, { type Request, Response, NextFunction } from "express";
-import cookieParser from "cookie-parser";
+import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
+import passport from "passport";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { configurePassport } from "./auth/passport";
 
 const app = express();
-app.use(cookieParser());
+
+// Trust the first proxy hop. Required so Express knows the request was HTTPS
+// when behind Cloud Run / Vercel / any load balancer; without this `Secure`
+// cookies are silently dropped.
+app.set("trust proxy", 1);
+
 // Capture the raw body for webhook signature verification (e.g. Stripe).
-app.use(express.json({
-  verify: (req, _res, buf) => {
-    (req as any).rawBody = buf;
-  },
-}));
+app.use(
+  express.json({
+    verify: (req, _res, buf) => {
+      (req as any).rawBody = buf;
+    },
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 
+// ─── Sessions backed by Postgres (Neon) ────────────────────────────────
+const PgStore = connectPgSimple(session);
+const sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret) {
+  if (process.env.NODE_ENV === "production") {
+    // Fail fast: refusing to start with a predictable signing key in prod.
+    throw new Error(
+      "SESSION_SECRET is required in production. Refusing to start the server."
+    );
+  }
+  console.warn(
+    "⚠️ SESSION_SECRET is not set. Using an ephemeral dev secret. Set SESSION_SECRET before deploying."
+  );
+}
+
+app.use(
+  session({
+    name: "automator.sid",
+    store: new PgStore({
+      conString: process.env.DATABASE_URL,
+      tableName: "session",
+      createTableIfMissing: true,
+    }),
+    secret: sessionSecret || "dev-only-insecure-secret",
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    },
+  })
+);
+
+// ─── Passport (Google OAuth) ────────────────────────────────────────────
+configurePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+// ─── Request logging ────────────────────────────────────────────────────
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -47,8 +99,6 @@ app.use((req, res, next) => {
   const server = await registerRoutes(app);
 
   // Guard: any /api/* route that wasn't handled above must return a JSON 404.
-  // Without this, requests fall through to the Vite catch-all and get the SPA
-  // index.html (200, text/html), which silently breaks fetch().json() callers.
   app.use("/api", (req: Request, res: Response) => {
     res.status(404).json({ error: "Not Found", path: req.originalUrl, method: req.method });
   });
@@ -61,39 +111,21 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = process.env.PORT || 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    const replit = process.env.REPL_SLUG && process.env.REPL_OWNER 
-      ? `https://${process.env.REPL_SLUG}--${process.env.REPL_OWNER}.repl.co`
-      : null;
-    
-    log(`LIVE: ${replit || `http://localhost:${port}`} (port ${port})`);
-    
-    if (replit) {
-      console.log(JSON.stringify({
-        status: "✅ LIVE",
-        url: replit,
-        frontend_loaded: true,
-        backend_active: true,
-        chatbot_visible: true,
-        api_tested: ["✅ /api/chat", "✅ /api/dashboard"]
-      }, null, 2));
+  // Cloud Run injects PORT (typically 8080); fall back to 5000 for local dev.
+  const port = parseInt(process.env.PORT || "5000", 10);
+  server.listen(
+    {
+      port,
+      host: "0.0.0.0",
+    },
+    () => {
+      log(`LIVE: http://localhost:${port} (port ${port})`);
     }
-  });
+  );
 })();

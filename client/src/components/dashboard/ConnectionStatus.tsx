@@ -12,7 +12,9 @@ interface HealthStatus {
     DATABASE_URL: boolean;
     GOOGLE_AI_API_KEY: boolean;
     GOOGLE_GENAI_API_KEY: boolean;
-    JWT_SECRET: boolean;
+    SESSION_SECRET: boolean;
+    GOOGLE_CLIENT_ID: boolean;
+    GOOGLE_CLIENT_SECRET: boolean;
   };
   timestamp: string;
 }
@@ -99,7 +101,7 @@ const ConnectionStatus: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 {getStatusIcon(status.auth)}
-                <span className="text-[#E6E8EC]">Auth (JWT)</span>
+                <span className="text-[#E6E8EC]">Auth (Google OAuth)</span>
               </div>
               {getStatusBadge(status.auth)}
             </div>
@@ -122,8 +124,22 @@ const ConnectionStatus: React.FC = () => {
                   }
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400">JWT_SECRET</span>
-                  {status.environment.JWT_SECRET ? 
+                  <span className="text-gray-400">SESSION_SECRET</span>
+                  {status.environment.SESSION_SECRET ? 
+                    <CheckCircle className="w-4 h-4 text-green-500" /> : 
+                    <XCircle className="w-4 h-4 text-red-500" />
+                  }
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">GOOGLE_CLIENT_ID</span>
+                  {status.environment.GOOGLE_CLIENT_ID ? 
+                    <CheckCircle className="w-4 h-4 text-green-500" /> : 
+                    <XCircle className="w-4 h-4 text-red-500" />
+                  }
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">GOOGLE_CLIENT_SECRET</span>
+                  {status.environment.GOOGLE_CLIENT_SECRET ? 
                     <CheckCircle className="w-4 h-4 text-green-500" /> : 
                     <XCircle className="w-4 h-4 text-red-500" />
                   }

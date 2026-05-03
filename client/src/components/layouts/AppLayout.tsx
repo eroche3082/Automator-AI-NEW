@@ -9,7 +9,7 @@ interface AppLayoutProps {
   children: React.ReactNode;
 }
 
-const PUBLIC_ROUTES = ["/login", "/register", "/pricing", "/thank-you", "/cancelled"];
+const PUBLIC_ROUTES = ["/login", "/pricing", "/thank-you", "/cancelled"];
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [location, setLocation] = useLocation();

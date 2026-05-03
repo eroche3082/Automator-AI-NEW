@@ -1,34 +1,16 @@
 import type { Request, Response, NextFunction } from "express";
-import { storage } from "../storage";
-import type { User } from "@shared/schema";
-
-declare global {
-  namespace Express {
-    interface Request {
-      dbUser?: User;
-    }
-  }
-}
 
 /**
- * Resolves the internal DB user from req.user (JWT). Must run AFTER `requireAuth`.
+ * Compatibility shim. Passport's deserializeUser already loads the full DB
+ * user into req.user, and `requireAuth` mirrors it to req.dbUser. This
+ * middleware is kept as a no-op so existing route arrays `[requireAuth, loadCurrentUser]`
+ * keep compiling.
  */
-export async function loadCurrentUser(req: Request, res: Response, next: NextFunction) {
-  if (!req.user?.id) {
+export function loadCurrentUser(req: Request, res: Response, next: NextFunction) {
+  if (!req.dbUser) {
     return res.status(401).json({ error: "Authentication required" });
   }
-
-  try {
-    const dbUser = await storage.getUser(req.user.id);
-    if (!dbUser) {
-      return res.status(401).json({ error: "User no longer exists" });
-    }
-    req.dbUser = dbUser;
-    next();
-  } catch (err) {
-    console.error("loadCurrentUser failed:", err);
-    res.status(500).json({ error: "Failed to resolve current user" });
-  }
+  next();
 }
 
 export function ownedRoute(handler: (req: Request, res: Response) => unknown) {

@@ -3,14 +3,17 @@ import { createInsertSchema } from "drizzle-zod";
 import { relations } from "drizzle-orm";
 import { z } from "zod";
 
-// User Schema
+// User Schema — populated from Google OAuth profile.
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  // bcrypt hash of the user's password.
-  password: text("password").notNull(),
-  name: text("name").notNull(),
+  // Google's stable subject identifier (sub claim). Unique per Google account.
+  googleId: text("google_id").unique(),
+  // Email taken from Google profile; also used as the legacy "username".
   email: text("email").notNull().unique(),
+  username: text("username").notNull().unique(),
+  name: text("name").notNull(),
+  // Profile picture URL from Google.
+  image: text("image"),
   company: text("company"),
   timezone: text("timezone").default("America/New_York"),
   language: text("language").default("en"),
@@ -29,22 +32,6 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// Auth payloads (client → server)
-export const registerPayloadSchema = z.object({
-  name: z.string().min(1).max(120),
-  email: z.string().email(),
-  password: z.string().min(8).max(200),
-  company: z.string().max(120).optional(),
-}).strict();
-
-export const loginPayloadSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1).max(200),
-}).strict();
-
-export type RegisterPayload = z.infer<typeof registerPayloadSchema>;
-export type LoginPayload = z.infer<typeof loginPayloadSchema>;
-
 export const usersRelations = relations(users, ({ many }) => ({
   workflows: many(workflows),
   leads: many(leads),
@@ -54,16 +41,17 @@ export const usersRelations = relations(users, ({ many }) => ({
 }));
 
 export const insertUserSchema = createInsertSchema(users).pick({
+  googleId: true,
   username: true,
-  password: true,
   name: true,
   email: true,
+  image: true,
   company: true,
   plan: true,
 });
 
 // Whitelist of fields a user is allowed to modify on their own profile.
-// Excludes: id, username, password, plan, stripe*, createdAt, updatedAt.
+// Excludes: id, googleId, username, plan, stripe*, createdAt, updatedAt.
 export const updateUserProfileSchema = z.object({
   name: z.string().min(1).max(120).optional(),
   email: z.string().email().optional(),

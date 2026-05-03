@@ -1,18 +1,19 @@
 # AUTOMATOR AI — Biblia Completa del Sistema
 
 ## Visión general
-SaaS de automatización de ventas y CRM con IA. Plataforma multi-tenant con autenticación JWT propia (Neon Postgres + bcrypt), suscripciones Stripe, IA Gemini/Vertex y orquestación opcional con n8n. Comunicación interna en español, profesional, sin emojis.
+SaaS de automatización de ventas y CRM con IA. Plataforma multi-tenant con autenticación Google OAuth 2.0 + sesiones en Neon Postgres, suscripciones Stripe, IA Gemini/Vertex y orquestación opcional con n8n. Comunicación interna en español, profesional, sin emojis.
 
-## Estado de deploy (2026-05-03 — migración Firebase → JWT)
-- **Firebase totalmente eliminado**: paquetes `firebase` y `firebase-admin` desinstalados. Sin imports residuales en cliente/servidor/shared.
-- **Auth nueva**: JWT firmado con `JWT_SECRET`, cookie httpOnly `auth_token` (Path=/, SameSite=Lax, Secure en prod, 7 días).
-- **Endpoints**: `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/session`. Bcrypt cost 10. Validación Zod (`registerPayloadSchema`/`loginPayloadSchema`).
-- **Schema**: columna `firebase_uid` eliminada de Neon (verificado vía `information_schema`). Campo `password` reutilizado para hash bcrypt.
-- **Middleware**: `attachUser`/`requireAuth` ahora leen JWT desde cookie (fallback Bearer). `loadCurrentUser` resuelve `req.dbUser` por id.
-- **UI**: nuevas páginas `/login` y `/register` (Spanish). `AppLayout` redirige a `/login` cuando no hay sesión, excepto rutas públicas (`/login`, `/register`, `/pricing`, `/thank-you`, `/cancelled`). Sidebar y Settings tienen botón "Cerrar sesión" que llama `/api/auth/logout`.
-- **Build**: 727 KB → 210 KB gzip, server bundle 132 KB. Auth flow completo verificado vía curl: register 201 → login 200 → /api/me 200 → logout 200 → /api/me 401.
-- **Health endpoint**: ahora reporta `auth: true` (basado en presencia de JWT_SECRET) en vez de `firebase`.
-- **TypeScript**: solo queda 1 error preexistente en `server/vite.ts` (archivo prohibido modificar; no afecta runtime).
+## Estado de deploy (2026-05-03 — migración a Google OAuth + Cloud Run readiness)
+- **Firebase**: totalmente eliminado (verificado en sesión previa).
+- **Auth**: Google OAuth 2.0 vía `passport-google-oauth20`. Sesiones server-side en Neon Postgres (tabla `session` auto-creada por `connect-pg-simple`). Cookie `automator.sid` (httpOnly, SameSite=Lax, Secure en prod, 7 días, `rolling: true`).
+- **Endpoints**: `GET /api/auth/google`, `GET /api/auth/google/callback`, `POST /api/auth/logout`, `GET /api/auth/session`. CSRF protection vía Passport `state: true`.
+- **Hardening**: server lanza `Error` si `SESSION_SECRET` falta en producción. Account-linking automático por email para usuarios pre-existentes.
+- **Schema**: columna `password` eliminada, `google_id` (text unique nullable) e `image` (text) añadidas.
+- **Cloud Run readiness**: `process.env.PORT` respetado (Cloud Run inyecta 8080), `host: 0.0.0.0`, `trust proxy: 1`. Sin código Replit-specific (REPL_SLUG/REPL_OWNER eliminados, `reusePort` quitado).
+- **Dockerfile**: multi-stage Node 20 alpine, `npm ci` → `npm run build` → `npm prune --omit=dev` → runner con usuario no-root, EXPOSE 8080.
+- **UI**: página `/login` con un solo botón "Continuar con Google". `/register` eliminada. `AppLayout` PUBLIC_ROUTES = `/login`, `/pricing`, `/thank-you`, `/cancelled`.
+- **Paquetes**: añadidos `passport-google-oauth20`, `pg`. Eliminados `bcryptjs`, `jsonwebtoken`, `cookie-parser`, `passport-local`.
+- **Build**: vite 723 KB → 209 KB gzip, esbuild server 131 KB. TS limpio salvo el error preexistente en `server/vite.ts`.
 
 ## Preferencias del usuario
 - Idioma: Español, profesional, sin emojis.
@@ -25,7 +26,7 @@ SaaS de automatización de ventas y CRM con IA. Plataforma multi-tenant con aute
 - **Frontend**: React 18 + Vite + TypeScript + TailwindCSS + shadcn/ui + Wouter + TanStack Query v5 + react-hook-form + zodResolver.
 - **Backend**: Express.js + TypeScript + Drizzle ORM.
 - **DB**: PostgreSQL en NeonDB.
-- **Auth**: JWT propio (cookie httpOnly `auth_token` firmada con `JWT_SECRET`) + bcrypt para hashes de password. Middleware `requireAuth` + `loadCurrentUser` resuelve `req.dbUser` por id.
+- **Auth**: Google OAuth 2.0 (`passport-google-oauth20`) con sesiones server-side en Neon Postgres (`express-session` + `connect-pg-simple`). Middleware `requireAuth` checa `req.isAuthenticated()` y propaga `req.user` (DB user completo) a `req.dbUser`.
 - **IA**: Google Vertex AI / Gemini en servidor via `/api/ai/*`. Cliente llama directamente al backend (Firebase AI Logic eliminado — era un bypass con credenciales hardcodeadas).
 - **Pagos**: Stripe live (`acct_1OFjtMLyFdxK9hC8` Edgar Roche), 3 planes (`basic`, `pro`, `elite`) con intervalos `month`/`year`, billing portal.
 - **Orquestación**: n8n opcional (avisa si no hay API key).
@@ -44,7 +45,8 @@ SaaS de automatización de ventas y CRM con IA. Plataforma multi-tenant con aute
 
 | Tabla | Campos clave | Propietario |
 |---|---|---|
-| `users` | username, password (bcrypt), email, stripeCustomerId, plan, notificationPrefs | — |
+| `users` | googleId, email, username, name, image, stripeCustomerId, plan, notificationPrefs | — |
+| `session` | sid, sess (json), expire — gestionada por `connect-pg-simple` | — |
 | `workflows` | name, description, status, steps (JSON), userId | userId |
 | `leads` | name, email, status, score, source, userId | userId |
 | `emailTemplates` | name, type (template/automation), subject, content, emails, lastEdited, userId | userId |

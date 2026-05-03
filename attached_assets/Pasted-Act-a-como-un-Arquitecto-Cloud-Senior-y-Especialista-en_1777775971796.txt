@@ -1,0 +1,29 @@
+Actúa como un Arquitecto Cloud Senior y Especialista en DevOps. Tu objetivo es refactorizar esta aplicación para que esté lista para un despliegue de producción en Google Cloud Run, eliminando dependencias innecesarias y estandarizando la autenticación.
+
+Sigue estos 4 pasos exactos y no te desvíes. Al terminar, entrégame el Reporte Final de Estatus:
+
+Fase 1: Extirpación de Firebase
+
+Elimina TODAS las dependencias, archivos de configuración, e importaciones relacionadas con Firebase. No debe quedar rastro de Firebase Auth ni Firestore.
+
+Fase 2: Implementación de Autenticación con Google (OAuth)
+
+Reemplaza el sistema de login integrando autenticación directa con Google OAuth 2.0 (usando NextAuth.js, Auth.js, o la mejor alternativa según el framework de esta app).
+
+Configura la lógica para que las sesiones de usuario y los perfiles se guarden exclusivamente en nuestra base de datos actual de Neon (PostgreSQL). Crea los modelos/esquemas de tabla necesarios.
+
+Fase 3: Optimización para Google Cloud Run
+
+Cloud Run requiere que la aplicación escuche en el puerto definido por la variable de entorno $PORT (usualmente 8080). Asegúrate de que los scripts de arranque (start) respeten esta regla estrictamente.
+
+Genera un archivo Dockerfile optimizado para producción en la raíz del proyecto. Debe ser ligero, hacer el build correctamente y exponer el puerto necesario.
+
+Asegúrate de que no haya dependencias atadas al entorno exclusivo de Replit.
+
+Fase 4: Entrégame el Reporte de Estatus usando este formato:
+
+1. Arquitectura Refactorizada: Breve resumen de cómo quedó el login y la conexión a Neon.
+
+2. Bloqueos de Build (Blockers): ¿Hay algún error de compilación actual que impida crear el contenedor Docker? Si la respuesta es sí, dime qué debes arreglar tú ahora mismo.
+
+3. Mapa de Variables de Entorno (Secrets): Dame la lista EXACTA de variables que necesito inyectar en Cloud Run. Incluye las nuevas de Google Auth (Ej. GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_URL, DATABASE_URL, etc.). Solo nombres, no valores.

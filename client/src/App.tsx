@@ -19,14 +19,12 @@ import Webhooks from "@/pages/Webhooks";
 import Settings from "@/pages/Settings";
 import SystemHealth from "@/pages/SystemHealth";
 import Login from "@/pages/Login";
-import Register from "@/pages/Register";
 import { useEffect } from "react";
 
 function Router() {
   return (
     <Switch>
       <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
       <Route path="/" component={Dashboard} />
       <Route path="/workflows" component={Workflows} />
       <Route path="/crm" component={CRM} />

@@ -34,7 +34,11 @@ export async function checkSystemHealth(): Promise<SystemHealth> {
     console.error('Database health check failed:', error);
   }
 
-  health.auth = !!process.env.JWT_SECRET;
+  health.auth = !!(
+    process.env.SESSION_SECRET &&
+    process.env.GOOGLE_CLIENT_ID &&
+    process.env.GOOGLE_CLIENT_SECRET
+  );
 
   health.googleApis.gemini = !!(process.env.GOOGLE_GENAI_API_KEY || process.env.GOOGLE_AI_API_KEY || process.env.GEMINI_API_KEY);
   health.googleApis.translation = !!process.env.GOOGLE_CLOUD_PROJECT;
