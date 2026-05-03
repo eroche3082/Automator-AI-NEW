@@ -73,3 +73,7 @@ expertMode = true
 
 [userenv.shared]
 JWT_SECRET = "OeweQycpvQ2gofo6ofmpIPnPR1gS6cfM-oLf01zSBE4K62j2bTdkbx9mPzKfgmVU"
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000
