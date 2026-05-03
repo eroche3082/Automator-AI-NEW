@@ -18,12 +18,12 @@ authRouter.get(
         .status(503)
         .json({ error: "Google OAuth is not configured on this server." });
     }
+    // CSRF protection: Passport generates a random `state` parameter, stores
+    // it in req.session, and verifies it on the callback. The runtime accepts
+    // `state: true`; cast because the d.ts types it as `string`.
     return passport.authenticate("google", {
       scope: ["profile", "email"],
-      // CSRF protection: Passport generates a random `state` parameter, stores
-      // it in req.session, and verifies it on the callback. Requires the
-      // session middleware to be mounted before passport.session(), which it is.
-      state: true,
+      state: true as unknown as string,
     })(req, res, next);
   }
 );

@@ -61,20 +61,12 @@ const Settings = () => {
   const { toast } = useToast();
   const [apiKey, setApiKey] = useState("••••••••••••••••••••••••••••••");
   const [showApiKey, setShowApiKey] = useState(false);
-  const [pwd, setPwd] = useState({ current: "", next: "", confirm: "" });
-
   const notReady = (label: string) =>
     toast({ title: label, description: "Esta función estará disponible próximamente." });
 
   const copyApiKey = () => {
     navigator.clipboard.writeText(apiKey);
     toast({ title: "API key copiada al portapapeles" });
-  };
-
-  const updatePassword = () => {
-    if (!pwd.current || !pwd.next) return toast({ title: "Completa todos los campos", variant: "destructive" });
-    if (pwd.next !== pwd.confirm) return toast({ title: "Las contraseñas no coinciden", variant: "destructive" });
-    notReady("Cambio de contraseña");
   };
 
   const deleteAccount = () => {
@@ -512,35 +504,42 @@ const Settings = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <div className="space-y-3">
-                      <Label>Change Password</Label>
-                      <Input type="password" placeholder="Current Password" className="bg-gray-800 border-gray-700 focus:border-[#0047FF]" value={pwd.current} onChange={e => setPwd({ ...pwd, current: e.target.value })} />
-                      <Input type="password" placeholder="New Password" className="bg-gray-800 border-gray-700 focus:border-[#0047FF]" value={pwd.next} onChange={e => setPwd({ ...pwd, next: e.target.value })} />
-                      <Input type="password" placeholder="Confirm New Password" className="bg-gray-800 border-gray-700 focus:border-[#0047FF]" value={pwd.confirm} onChange={e => setPwd({ ...pwd, confirm: e.target.value })} />
-                      <Button className="w-fit mt-2 gradient-btn" onClick={updatePassword}>
-                        Update Password
-                      </Button>
+                    <div className="rounded-lg border border-gray-800 bg-[#0D0E11] p-4 flex items-start gap-3">
+                      <Shield className="w-5 h-5 text-[#00E5A8] mt-0.5 shrink-0" />
+                      <div className="space-y-1">
+                        <h4 className="font-medium text-[#E6E8EC]">Sesión iniciada con Google</h4>
+                        <p className="text-sm text-gray-400">
+                          Tu cuenta usa Google OAuth 2.0. La autenticación, contraseña y verificación en dos pasos se gestionan directamente en tu cuenta de Google. No almacenamos contraseñas en nuestros servidores.
+                        </p>
+                        <a
+                          href="https://myaccount.google.com/security"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block text-sm text-[#0047FF] hover:underline mt-1"
+                          data-testid="link-google-security"
+                        >
+                          Gestionar seguridad en Google →
+                        </a>
+                      </div>
                     </div>
 
                     <Separator className="bg-gray-800" />
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <h4 className="font-medium text-[#E6E8EC]">Two-Factor Authentication</h4>
-                        <p className="text-sm text-gray-400 mt-1">Add an extra layer of security to your account</p>
+                        <h4 className="font-medium text-[#E6E8EC]">Cerrar sesión en este dispositivo</h4>
+                        <p className="text-sm text-gray-400 mt-1">Termina la sesión actual en este navegador.</p>
                       </div>
-                      <Switch checked={formData.twoFactorAuth} onCheckedChange={(checked) => setFormData({...formData, twoFactorAuth: checked})} />
-                    </div>
-
-                    <Separator className="bg-gray-800" />
-
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium text-[#E6E8EC]">Session Management</h4>
-                        <p className="text-sm text-gray-400 mt-1">Manage your active sessions and devices</p>
-                      </div>
-                      <Button variant="outline" className="bg-gray-800 border-gray-700" onClick={() => notReady("Gestión de sesiones")}>
-                        View Sessions
+                      <Button
+                        variant="outline"
+                        className="bg-gray-800 border-gray-700"
+                        onClick={() => {
+                          fetch("/api/auth/logout", { method: "POST", credentials: "include" })
+                            .then(() => (window.location.href = "/login"));
+                        }}
+                        data-testid="button-settings-logout"
+                      >
+                        Cerrar sesión
                       </Button>
                     </div>
 
