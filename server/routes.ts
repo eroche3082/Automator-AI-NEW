@@ -31,14 +31,18 @@ function parseOrFail<T>(schema: { safeParse: (i: unknown) => any }, body: unknow
 import { attachUser, requireAuth } from "./middleware/auth";
 import { loadCurrentUser } from "./middleware/current-user";
 import { getPlanByCode } from "@shared/membership";
+import { authRouter } from "./routes/auth";
 
 // Convenience: routes that need authentication + DB-user resolution.
 const authed = [requireAuth, loadCurrentUser];
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Attach req.user to every request when a valid Firebase token is provided.
+  // Attach req.user to every request when a valid JWT cookie/header is present.
   // Endpoints that require authentication use the strict `requireAuth` middleware.
   app.use("/api", attachUser);
+
+  // Auth routes (register / login / logout / session)
+  app.use("/api/auth", authRouter);
 
   // API Routes
 
@@ -63,7 +67,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Current user (profile) — read & update
   // ============================================================
   // Public-safe shape of a user. Excludes credentials AND internal identifiers
-  // (firebaseUid, stripeCustomerId, stripeSubscriptionId) that the client does not need.
+  // (stripeCustomerId, stripeSubscriptionId) that the client does not need.
   function toProfileDto(u: User) {
     return {
       id: u.id,
@@ -720,10 +724,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { stripeService } = await import("./services/stripe-service");
       // Derive Stripe customerId from the authenticated user; never trust client input.
-      if (!req.user?.uid) {
+      if (!req.user?.id) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      const dbUser = await storage.getUserByFirebaseUid(req.user.uid);
+      const dbUser = await storage.getUser(req.user.id);
       if (!dbUser?.stripeCustomerId) {
         return res.status(404).json({ error: "No Stripe customer linked to this account" });
       }

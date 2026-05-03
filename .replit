@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web"]
+modules = ["nodejs-20", "web", "python-3.11", "postgresql-16"]
 run = "npm run dev"
 hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
@@ -68,3 +68,8 @@ args = "npm run dev"
 [agent]
 stack = "FULLSTACK_JS"
 expertMode = true
+
+[userenv]
+
+[userenv.shared]
+JWT_SECRET = "OeweQycpvQ2gofo6ofmpIPnPR1gS6cfM-oLf01zSBE4K62j2bTdkbx9mPzKfgmVU"

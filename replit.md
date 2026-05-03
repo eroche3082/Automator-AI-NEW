@@ -1,15 +1,18 @@
 # AUTOMATOR AI — Biblia Completa del Sistema
 
 ## Visión general
-SaaS de automatización de ventas y CRM con IA. Plataforma multi-tenant con autenticación Firebase, suscripciones Stripe, IA Gemini/Vertex y orquestación opcional con n8n. Comunicación interna en español, profesional, sin emojis.
+SaaS de automatización de ventas y CRM con IA. Plataforma multi-tenant con autenticación JWT propia (Neon Postgres + bcrypt), suscripciones Stripe, IA Gemini/Vertex y orquestación opcional con n8n. Comunicación interna en español, profesional, sin emojis.
 
-## Estado de deploy (2026-05-03)
-- Build de producción OK (vite build + esbuild). Bundle: 810 KB → 227 KB gzip.
-- Health endpoint `/api/system/health`: 6/7 servicios OK (DB, Gemini, Translate, TTS, Stripe LIVE, n8n). 1 warning por `GOOGLE_APPLICATION_CREDENTIALS` opcional.
-- 11/11 rutas frontend responden 200, incluyendo `/connections` (ruta antes huérfana, ya registrada en `App.tsx`).
-- 8/8 endpoints auth-gated responden 503 sin login (esperado hasta que el usuario provea las 8 claves Firebase).
-- Sidebar muestra usuario real desde `/api/me` (antes hardcodeaba "Admin User / admin@automator.ai").
-- TypeScript: solo queda 1 error preexistente en `server/vite.ts` (archivo prohibido modificar; no afecta runtime).
+## Estado de deploy (2026-05-03 — migración Firebase → JWT)
+- **Firebase totalmente eliminado**: paquetes `firebase` y `firebase-admin` desinstalados. Sin imports residuales en cliente/servidor/shared.
+- **Auth nueva**: JWT firmado con `JWT_SECRET`, cookie httpOnly `auth_token` (Path=/, SameSite=Lax, Secure en prod, 7 días).
+- **Endpoints**: `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/session`. Bcrypt cost 10. Validación Zod (`registerPayloadSchema`/`loginPayloadSchema`).
+- **Schema**: columna `firebase_uid` eliminada de Neon (verificado vía `information_schema`). Campo `password` reutilizado para hash bcrypt.
+- **Middleware**: `attachUser`/`requireAuth` ahora leen JWT desde cookie (fallback Bearer). `loadCurrentUser` resuelve `req.dbUser` por id.
+- **UI**: nuevas páginas `/login` y `/register` (Spanish). `AppLayout` redirige a `/login` cuando no hay sesión, excepto rutas públicas (`/login`, `/register`, `/pricing`, `/thank-you`, `/cancelled`). Sidebar y Settings tienen botón "Cerrar sesión" que llama `/api/auth/logout`.
+- **Build**: 727 KB → 210 KB gzip, server bundle 132 KB. Auth flow completo verificado vía curl: register 201 → login 200 → /api/me 200 → logout 200 → /api/me 401.
+- **Health endpoint**: ahora reporta `auth: true` (basado en presencia de JWT_SECRET) en vez de `firebase`.
+- **TypeScript**: solo queda 1 error preexistente en `server/vite.ts` (archivo prohibido modificar; no afecta runtime).
 
 ## Preferencias del usuario
 - Idioma: Español, profesional, sin emojis.
@@ -22,7 +25,7 @@ SaaS de automatización de ventas y CRM con IA. Plataforma multi-tenant con aute
 - **Frontend**: React 18 + Vite + TypeScript + TailwindCSS + shadcn/ui + Wouter + TanStack Query v5 + react-hook-form + zodResolver.
 - **Backend**: Express.js + TypeScript + Drizzle ORM.
 - **DB**: PostgreSQL en NeonDB.
-- **Auth**: Firebase Auth (cliente) + Firebase Admin (servidor) — middleware `requireAuth` + `loadCurrentUser` resuelve `req.dbUser`.
+- **Auth**: JWT propio (cookie httpOnly `auth_token` firmada con `JWT_SECRET`) + bcrypt para hashes de password. Middleware `requireAuth` + `loadCurrentUser` resuelve `req.dbUser` por id.
 - **IA**: Google Vertex AI / Gemini en servidor via `/api/ai/*`. Cliente llama directamente al backend (Firebase AI Logic eliminado — era un bypass con credenciales hardcodeadas).
 - **Pagos**: Stripe live (`acct_1OFjtMLyFdxK9hC8` Edgar Roche), 3 planes (`basic`, `pro`, `elite`) con intervalos `month`/`year`, billing portal.
 - **Orquestación**: n8n opcional (avisa si no hay API key).
@@ -41,7 +44,7 @@ SaaS de automatización de ventas y CRM con IA. Plataforma multi-tenant con aute
 
 | Tabla | Campos clave | Propietario |
 |---|---|---|
-| `users` | firebaseUid, email, stripeCustomerId, plan, notificationPrefs | — |
+| `users` | username, password (bcrypt), email, stripeCustomerId, plan, notificationPrefs | — |
 | `workflows` | name, description, status, steps (JSON), userId | userId |
 | `leads` | name, email, status, score, source, userId | userId |
 | `emailTemplates` | name, type (template/automation), subject, content, emails, lastEdited, userId | userId |

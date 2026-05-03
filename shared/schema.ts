@@ -7,6 +7,7 @@ import { z } from "zod";
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
+  // bcrypt hash of the user's password.
   password: text("password").notNull(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
@@ -21,13 +22,28 @@ export const users = pgTable("users", {
     marketingUpdates: false,
   }),
   plan: text("plan").default("free").notNull(),
-  firebaseUid: text("firebase_uid").unique(),
   stripeCustomerId: text("stripe_customer_id").unique(),
   stripeSubscriptionId: text("stripe_subscription_id"),
   subscriptionStatus: text("subscription_status"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+// Auth payloads (client → server)
+export const registerPayloadSchema = z.object({
+  name: z.string().min(1).max(120),
+  email: z.string().email(),
+  password: z.string().min(8).max(200),
+  company: z.string().max(120).optional(),
+}).strict();
+
+export const loginPayloadSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1).max(200),
+}).strict();
+
+export type RegisterPayload = z.infer<typeof registerPayloadSchema>;
+export type LoginPayload = z.infer<typeof loginPayloadSchema>;
 
 export const usersRelations = relations(users, ({ many }) => ({
   workflows: many(workflows),
@@ -47,7 +63,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
 });
 
 // Whitelist of fields a user is allowed to modify on their own profile.
-// Excludes: id, username, password, plan, firebaseUid, stripe*, createdAt, updatedAt.
+// Excludes: id, username, password, plan, stripe*, createdAt, updatedAt.
 export const updateUserProfileSchema = z.object({
   name: z.string().min(1).max(120).optional(),
   email: z.string().email().optional(),

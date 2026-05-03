@@ -1,7 +1,10 @@
 import { useLocation } from "wouter";
 import { Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 import type { User as DbUser } from "@shared/schema";
 import {
   LayoutDashboard,
@@ -19,11 +22,21 @@ import {
 } from "lucide-react";
 
 const Sidebar = () => {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
+  const { toast } = useToast();
   const { data: profile } = useQuery<DbUser>({ queryKey: ["/api/me"], retry: false });
   const displayName = profile?.name || profile?.email?.split("@")[0] || "Guest";
   const displayEmail = profile?.email || "Sign in to continue";
   const initial = (profile?.name || profile?.email || "G").charAt(0).toUpperCase();
+
+  const logout = useMutation({
+    mutationFn: async () => apiRequest({ url: "/api/auth/logout", method: "POST" }),
+    onSuccess: () => {
+      queryClient.clear();
+      toast({ title: "Sesión cerrada" });
+      setLocation("/login");
+    },
+  });
 
   const isActive = (path: string) => {
     return location === path;
@@ -100,6 +113,17 @@ const Sidebar = () => {
           </div>
           <ThemeSwitcher />
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full bg-gray-800 border-gray-700 text-gray-300 hover:text-white"
+          onClick={() => logout.mutate()}
+          disabled={logout.isPending}
+          data-testid="button-sidebar-logout"
+        >
+          <LogOut className="w-4 h-4 mr-2" />
+          {logout.isPending ? "Cerrando..." : "Cerrar sesión"}
+        </Button>
       </div>
     </aside>
   );

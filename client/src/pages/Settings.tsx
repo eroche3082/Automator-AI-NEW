@@ -36,8 +36,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Link as WouterLink } from "wouter";
-import { signOut } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { useLocation } from "wouter";
 import type { User as DbUser } from "@shared/schema";
 
 type NotificationPrefs = {
@@ -176,11 +175,13 @@ const Settings = () => {
     },
   });
 
+  const [, setLocation] = useLocation();
   const handleLogout = async () => {
     try {
-      if (auth) await signOut(auth);
+      await apiRequest({ url: "/api/auth/logout", method: "POST" });
       queryClient.clear();
-      toast({ title: "Signed out" });
+      toast({ title: "Sesión cerrada" });
+      setLocation("/login");
     } catch (err: any) {
       toast({ title: "Sign-out failed", description: err?.message, variant: "destructive" });
     }

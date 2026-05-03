@@ -7,12 +7,12 @@ import { CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 interface HealthStatus {
   database: boolean;
   gemini: boolean;
-  firebase: boolean;
+  auth: boolean;
   environment: {
     DATABASE_URL: boolean;
     GOOGLE_AI_API_KEY: boolean;
     GOOGLE_GENAI_API_KEY: boolean;
-    SERVICE_ACCOUNT: boolean;
+    JWT_SECRET: boolean;
   };
   timestamp: string;
 }
@@ -98,10 +98,10 @@ const ConnectionStatus: React.FC = () => {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                {getStatusIcon(status.firebase)}
-                <span className="text-[#E6E8EC]">Firebase</span>
+                {getStatusIcon(status.auth)}
+                <span className="text-[#E6E8EC]">Auth (JWT)</span>
               </div>
-              {getStatusBadge(status.firebase)}
+              {getStatusBadge(status.auth)}
             </div>
 
             <div className="border-t border-gray-700 pt-4">
@@ -122,8 +122,8 @@ const ConnectionStatus: React.FC = () => {
                   }
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400">SERVICE_ACCOUNT</span>
-                  {status.environment.SERVICE_ACCOUNT ? 
+                  <span className="text-gray-400">JWT_SECRET</span>
+                  {status.environment.JWT_SECRET ? 
                     <CheckCircle className="w-4 h-4 text-green-500" /> : 
                     <XCircle className="w-4 h-4 text-red-500" />
                   }

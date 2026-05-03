@@ -1,48 +1,19 @@
 import type { Request, Response, NextFunction } from "express";
-import admin from "firebase-admin";
-import fs from "fs";
-import path from "path";
+import jwt from "jsonwebtoken";
 
-let initialized = false;
-let initFailed = false;
+const JWT_SECRET = process.env.JWT_SECRET;
+export const AUTH_COOKIE = "auth_token";
+export const TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
-function initFirebaseAdmin() {
-  if (initialized || initFailed) return;
-  try {
-    const envCred = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
-    let credential: admin.credential.Credential | null = null;
-
-    if (envCred) {
-      credential = admin.credential.cert(JSON.parse(envCred));
-    } else {
-      const filePath = path.join(process.cwd(), "service-account.json");
-      if (fs.existsSync(filePath)) {
-        const json = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-        credential = admin.credential.cert(json);
-      }
-    }
-
-    if (!credential) {
-      console.warn("⚠️ Firebase Admin not initialized: no credentials found (set FIREBASE_SERVICE_ACCOUNT_JSON or place service-account.json). Auth middleware will reject all requests.");
-      initFailed = true;
-      return;
-    }
-
-    admin.initializeApp({ credential });
-    initialized = true;
-    console.log("✅ Firebase Admin initialized");
-  } catch (err) {
-    console.error("❌ Firebase Admin init failed:", err);
-    initFailed = true;
-  }
+if (!JWT_SECRET) {
+  console.warn(
+    "⚠️ JWT_SECRET is not set. Authentication will refuse all requests until it is configured."
+  );
 }
 
-initFirebaseAdmin();
-
 export interface AuthUser {
-  uid: string;
-  email?: string;
-  name?: string;
+  id: number;
+  email: string;
 }
 
 declare global {
@@ -53,51 +24,91 @@ declare global {
   }
 }
 
-/**
- * Optional auth: attaches req.user if a valid Bearer token is present.
- * Does NOT block requests without a token. Use for endpoints that may serve
- * both authenticated and anonymous users.
- */
-export async function attachUser(req: Request, _res: Response, next: NextFunction) {
-  if (!initialized) return next();
+export function signAuthToken(user: AuthUser): string {
+  if (!JWT_SECRET) throw new Error("JWT_SECRET not configured");
+  return jwt.sign({ sub: user.id, email: user.email }, JWT_SECRET, {
+    expiresIn: TOKEN_TTL_SECONDS,
+  });
+}
+
+export function buildAuthCookie(token: string): string {
+  const isProd = process.env.NODE_ENV === "production";
+  const parts = [
+    `${AUTH_COOKIE}=${token}`,
+    "Path=/",
+    "HttpOnly",
+    "SameSite=Lax",
+    `Max-Age=${TOKEN_TTL_SECONDS}`,
+  ];
+  if (isProd) parts.push("Secure");
+  return parts.join("; ");
+}
+
+export function buildClearAuthCookie(): string {
+  const isProd = process.env.NODE_ENV === "production";
+  const parts = [
+    `${AUTH_COOKIE}=`,
+    "Path=/",
+    "HttpOnly",
+    "SameSite=Lax",
+    "Max-Age=0",
+  ];
+  if (isProd) parts.push("Secure");
+  return parts.join("; ");
+}
+
+function extractToken(req: Request): string | null {
+  // Prefer cookie; fall back to Authorization: Bearer for API clients.
+  const cookieToken = (req as any).cookies?.[AUTH_COOKIE];
+  if (cookieToken && typeof cookieToken === "string") return cookieToken;
+
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) return next();
-  const idToken = authHeader.slice(7);
-  try {
-    const decoded = await admin.auth().verifyIdToken(idToken);
-    req.user = {
-      uid: decoded.uid,
-      email: decoded.email,
-      name: decoded.name,
-    };
-  } catch {
-    // Invalid token: ignore for optional auth
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    return authHeader.slice(7);
   }
+  return null;
+}
+
+function verifyToken(token: string): AuthUser | null {
+  if (!JWT_SECRET) return null;
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
+    if (typeof decoded.sub !== "number" && typeof decoded.sub !== "string") return null;
+    const id = typeof decoded.sub === "number" ? decoded.sub : parseInt(decoded.sub, 10);
+    if (!Number.isFinite(id)) return null;
+    return { id, email: typeof decoded.email === "string" ? decoded.email : "" };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Optional auth: attaches req.user if a valid token is present.
+ * Does NOT block requests without a token.
+ */
+export function attachUser(req: Request, _res: Response, next: NextFunction) {
+  const token = extractToken(req);
+  if (!token) return next();
+  const user = verifyToken(token);
+  if (user) req.user = user;
   next();
 }
 
 /**
- * Strict auth: rejects requests without a valid Firebase ID token.
- * Apply to mutation endpoints and any endpoint exposing user-specific data.
+ * Strict auth: rejects requests without a valid JWT.
  */
-export async function requireAuth(req: Request, res: Response, next: NextFunction) {
-  if (!initialized) {
+export function requireAuth(req: Request, res: Response, next: NextFunction) {
+  if (!JWT_SECRET) {
     return res.status(503).json({ error: "Authentication service unavailable" });
   }
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Missing or invalid Authorization header" });
+  const token = extractToken(req);
+  if (!token) {
+    return res.status(401).json({ error: "Authentication required" });
   }
-  const idToken = authHeader.slice(7);
-  try {
-    const decoded = await admin.auth().verifyIdToken(idToken);
-    req.user = {
-      uid: decoded.uid,
-      email: decoded.email,
-      name: decoded.name,
-    };
-    next();
-  } catch (err) {
-    res.status(401).json({ error: "Invalid or expired token" });
+  const user = verifyToken(token);
+  if (!user) {
+    return res.status(401).json({ error: "Invalid or expired token" });
   }
+  req.user = user;
+  next();
 }

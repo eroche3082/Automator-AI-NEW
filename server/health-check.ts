@@ -2,7 +2,7 @@ import { pool } from './db';
 
 export interface SystemHealth {
   database: boolean;
-  firebase: boolean;
+  auth: boolean;
   googleApis: {
     gemini: boolean;
     translation: boolean;
@@ -15,7 +15,7 @@ export interface SystemHealth {
 export async function checkSystemHealth(): Promise<SystemHealth> {
   const health: SystemHealth = {
     database: false,
-    firebase: false,
+    auth: false,
     googleApis: {
       gemini: false,
       translation: false,
@@ -25,45 +25,23 @@ export async function checkSystemHealth(): Promise<SystemHealth> {
     n8n: false,
   };
 
-  // Database check
   try {
     if (pool) {
-      const result = await pool.query('SELECT 1');
+      await pool.query('SELECT 1');
       health.database = true;
     }
   } catch (error) {
     console.error('Database health check failed:', error);
   }
 
-  // Firebase check
-  try {
-    health.firebase = !!process.env.FIREBASE_PROJECT_ID;
-  } catch (error) {
-    console.error('Firebase health check failed:', error);
-  }
+  health.auth = !!process.env.JWT_SECRET;
 
-  // Google APIs check
-  try {
-    health.googleApis.gemini = !!process.env.GOOGLE_CLOUD_PROJECT;
-    health.googleApis.translation = !!process.env.GOOGLE_CLOUD_PROJECT;
-    health.googleApis.textToSpeech = !!process.env.GOOGLE_CLOUD_PROJECT;
-  } catch (error) {
-    console.error('Google APIs health check failed:', error);
-  }
+  health.googleApis.gemini = !!(process.env.GOOGLE_GENAI_API_KEY || process.env.GOOGLE_AI_API_KEY || process.env.GEMINI_API_KEY);
+  health.googleApis.translation = !!process.env.GOOGLE_CLOUD_PROJECT;
+  health.googleApis.textToSpeech = !!process.env.GOOGLE_CLOUD_PROJECT;
 
-  // Stripe check
-  try {
-    health.stripe = !!(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_PUBLISHABLE_KEY);
-  } catch (error) {
-    console.error('Stripe health check failed:', error);
-  }
-
-  // n8n check
-  try {
-    health.n8n = !!process.env.N8N_API_KEY;
-  } catch (error) {
-    console.error('n8n health check failed:', error);
-  }
+  health.stripe = !!(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_PUBLISHABLE_KEY);
+  health.n8n = !!process.env.N8N_API_KEY;
 
   return health;
 }

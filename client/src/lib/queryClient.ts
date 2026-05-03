@@ -1,18 +1,4 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
-import { auth } from "./firebase";
-
-async function getAuthHeaders(): Promise<Record<string, string>> {
-  try {
-    const user = auth?.currentUser;
-    if (user) {
-      const token = await user.getIdToken();
-      return { Authorization: `Bearer ${token}` };
-    }
-  } catch {
-    // ignore
-  }
-  return {};
-}
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -21,17 +7,14 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
-export async function apiRequest<T = any>(
-  options: {
-    url: string;
-    method: string;
-    data?: unknown;
-  }
-): Promise<T> {
+export async function apiRequest<T = any>(options: {
+  url: string;
+  method: string;
+  data?: unknown;
+}): Promise<T> {
   const { url, method, data } = options;
 
-  const authHeaders = await getAuthHeaders();
-  const headers: Record<string, string> = { ...authHeaders };
+  const headers: Record<string, string> = {};
   if (data) headers["Content-Type"] = "application/json";
 
   const res = await fetch(url, {
@@ -42,7 +25,9 @@ export async function apiRequest<T = any>(
   });
 
   await throwIfResNotOk(res);
-  return res.json();
+  // Some endpoints (e.g. logout) return empty body.
+  const text = await res.text();
+  return (text ? JSON.parse(text) : ({} as T)) as T;
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
@@ -51,9 +36,7 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const authHeaders = await getAuthHeaders();
     const res = await fetch(queryKey[0] as string, {
-      headers: authHeaders,
       credentials: "include",
     });
 

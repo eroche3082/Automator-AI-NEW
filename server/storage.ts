@@ -14,7 +14,7 @@ export interface IStorage {
   // User operations
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
-  getUserByFirebaseUid(uid: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   getUserByStripeCustomerId(customerId: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, data: Partial<User>): Promise<User | undefined>;
@@ -84,8 +84,8 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async getUserByFirebaseUid(uid: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.firebaseUid, uid));
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
     return user;
   }
 

@@ -3,9 +3,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Check, Zap, Crown, Rocket, ExternalLink, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
-import { auth } from "@/lib/firebase";
+import type { User as DbUser } from "@shared/schema";
 
 type PlanCode = "basic" | "pro" | "elite";
 
@@ -70,6 +71,8 @@ const PLANS: PlanCard[] = [
 
 const Pricing = () => {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
+  const { data: profile } = useQuery<DbUser>({ queryKey: ["/api/me"], retry: false });
 
   const checkout = useMutation({
     mutationFn: async (planCode: PlanCode) => {
@@ -92,12 +95,12 @@ const Pricing = () => {
   });
 
   const handleSubscribe = (code: PlanCode) => {
-    if (!auth?.currentUser) {
+    if (!profile) {
       toast({
         title: "Sign in required",
-        description: "Please log in before subscribing to a plan.",
-        variant: "destructive",
+        description: "Inicia sesión antes de suscribirte a un plan.",
       });
+      setLocation("/login");
       return;
     }
     checkout.mutate(code);
