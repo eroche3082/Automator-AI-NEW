@@ -17,7 +17,7 @@ if (stripePublishableKey && !stripePublishableKey.startsWith('pk_live_')) {
 
 // Defer construction so the module can be imported even without keys (errors surface per-call).
 const stripe = new Stripe(stripeSecretKey || 'sk_test_placeholder', {
-  apiVersion: '2024-09-30.acacia',
+  apiVersion: '2025-07-30.basil',
 });
 
 export interface PlanDefinition {
@@ -139,9 +139,14 @@ export class StripeService {
   private async ensurePaymentLink(priceId: string, planName: string): Promise<Stripe.PaymentLink> {
     // Check for existing payment link with same price
     const links = await stripe.paymentLinks.list({ limit: 100 });
-    const existing = links.data.find(l =>
-      l.line_items?.some(li => (li.price as any)?.id === priceId)
-    );
+    let existing: Stripe.PaymentLink | undefined;
+    for (const link of links.data) {
+      const items = await stripe.paymentLinks.listLineItems(link.id, { limit: 10 });
+      if (items.data.some((li: Stripe.LineItem) => (li.price as Stripe.Price | null)?.id === priceId)) {
+        existing = link;
+        break;
+      }
+    }
 
     if (existing) {
       return existing;

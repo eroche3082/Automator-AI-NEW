@@ -241,7 +241,7 @@ class GeminiService {
     return {
       greeting: "Welcome back to your automation hub!",
       activeWorkflows: 12,
-      timesSaved: "4.5 hours",
+      timesSaved: 4.5,
       suggestion: "Try connecting your calendar to automate meeting reminders and save even more time."
     };
   }

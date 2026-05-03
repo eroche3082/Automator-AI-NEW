@@ -1,6 +1,8 @@
 import { useLocation } from "wouter";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
+import type { User as DbUser } from "@shared/schema";
 import {
   LayoutDashboard,
   Workflow,
@@ -18,6 +20,10 @@ import {
 
 const Sidebar = () => {
   const [location] = useLocation();
+  const { data: profile } = useQuery<DbUser>({ queryKey: ["/api/me"], retry: false });
+  const displayName = profile?.name || profile?.email?.split("@")[0] || "Guest";
+  const displayEmail = profile?.email || "Sign in to continue";
+  const initial = (profile?.name || profile?.email || "G").charAt(0).toUpperCase();
 
   const isActive = (path: string) => {
     return location === path;
@@ -85,11 +91,11 @@ const Sidebar = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#6C5CE7] to-[#00E5A8] flex items-center justify-center">
-              <span className="text-xs font-bold text-white">A</span>
+              <span className="text-xs font-bold text-white" data-testid="text-user-initial">{initial}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#E6E8EC] truncate">Admin User</p>
-              <p className="text-xs text-[#94A3B8] truncate">admin@automator.ai</p>
+              <p className="text-sm font-medium text-[#E6E8EC] truncate" data-testid="text-user-name">{displayName}</p>
+              <p className="text-xs text-[#94A3B8] truncate" data-testid="text-user-email">{displayEmail}</p>
             </div>
           </div>
           <ThemeSwitcher />

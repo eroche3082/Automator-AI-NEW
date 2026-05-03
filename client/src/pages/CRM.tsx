@@ -34,7 +34,7 @@ const CRM = () => {
 
   const form = useForm({
     resolver: zodResolver(createLeadPayloadSchema),
-    defaultValues: { name: "", email: "", phone: "", company: "", status: "cold", notes: "", tags: [] },
+    defaultValues: { name: "", email: "", phone: "", company: "", status: "cold", notes: "", tags: [] as string[] },
   });
 
   const upsertMutation = useMutation({
@@ -62,7 +62,7 @@ const CRM = () => {
     onError: (e: any) => toast({ title: "Failed", description: e.message, variant: "destructive" }),
   });
 
-  const openCreate = () => { setEditing(null); form.reset({ name: "", email: "", phone: "", company: "", status: "cold", notes: "", tags: [] }); setShowDialog(true); };
+  const openCreate = () => { setEditing(null); form.reset({ name: "", email: "", phone: "", company: "", status: "cold", notes: "", tags: [] as string[] }); setShowDialog(true); };
   const openEdit = (l: Lead) => {
     setEditing(l);
     form.reset({ name: l.name, email: l.email, phone: l.phone || "", company: l.company || "", status: l.status, notes: l.notes || "", tags: (l.tags as string[]) || [] });

@@ -3,6 +3,14 @@
 ## Visión general
 SaaS de automatización de ventas y CRM con IA. Plataforma multi-tenant con autenticación Firebase, suscripciones Stripe, IA Gemini/Vertex y orquestación opcional con n8n. Comunicación interna en español, profesional, sin emojis.
 
+## Estado de deploy (2026-05-03)
+- Build de producción OK (vite build + esbuild). Bundle: 810 KB → 227 KB gzip.
+- Health endpoint `/api/system/health`: 6/7 servicios OK (DB, Gemini, Translate, TTS, Stripe LIVE, n8n). 1 warning por `GOOGLE_APPLICATION_CREDENTIALS` opcional.
+- 11/11 rutas frontend responden 200, incluyendo `/connections` (ruta antes huérfana, ya registrada en `App.tsx`).
+- 8/8 endpoints auth-gated responden 503 sin login (esperado hasta que el usuario provea las 8 claves Firebase).
+- Sidebar muestra usuario real desde `/api/me` (antes hardcodeaba "Admin User / admin@automator.ai").
+- TypeScript: solo queda 1 error preexistente en `server/vite.ts` (archivo prohibido modificar; no afecta runtime).
+
 ## Preferencias del usuario
 - Idioma: Español, profesional, sin emojis.
 - Verificación exhaustiva: cada botón/enlace/feature debe estar cableado a backend real (NO MOCK).

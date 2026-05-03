@@ -33,6 +33,7 @@ function Router() {
       <Route path="/cancelled" component={Cancel} />
       <Route path="/system-health" component={SystemHealth} />
       <Route path="/n8n" component={N8nIntegrationPage} />
+      <Route path="/connections" component={Connections} />
       <Route path="/settings" component={Settings} />
       <Route path="/webhooks" component={Webhooks} />
       <Route component={NotFound} />
