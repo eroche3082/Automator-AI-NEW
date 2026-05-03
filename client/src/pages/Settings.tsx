@@ -507,9 +507,9 @@ const Settings = () => {
                     <div className="rounded-lg border border-gray-800 bg-[#0D0E11] p-4 flex items-start gap-3">
                       <Shield className="w-5 h-5 text-[#00E5A8] mt-0.5 shrink-0" />
                       <div className="space-y-1">
-                        <h4 className="font-medium text-[#E6E8EC]">Sesión iniciada con Google</h4>
+                        <h4 className="font-medium text-[#E6E8EC]">Signed in with Google</h4>
                         <p className="text-sm text-gray-400">
-                          Tu cuenta usa Google OAuth 2.0. La autenticación, contraseña y verificación en dos pasos se gestionan directamente en tu cuenta de Google. No almacenamos contraseñas en nuestros servidores.
+                          Your account uses Google OAuth 2.0. Authentication, password, and two-factor verification are managed directly in your Google account. We never store passwords on our servers.
                         </p>
                         <a
                           href="https://myaccount.google.com/security"
@@ -518,7 +518,7 @@ const Settings = () => {
                           className="inline-block text-sm text-[#0047FF] hover:underline mt-1"
                           data-testid="link-google-security"
                         >
-                          Gestionar seguridad en Google →
+                          Manage security on Google →
                         </a>
                       </div>
                     </div>
@@ -527,8 +527,8 @@ const Settings = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <h4 className="font-medium text-[#E6E8EC]">Cerrar sesión en este dispositivo</h4>
-                        <p className="text-sm text-gray-400 mt-1">Termina la sesión actual en este navegador.</p>
+                        <h4 className="font-medium text-[#E6E8EC]">Sign out of this device</h4>
+                        <p className="text-sm text-gray-400 mt-1">End the current session on this browser.</p>
                       </div>
                       <Button
                         variant="outline"
@@ -539,7 +539,7 @@ const Settings = () => {
                         }}
                         data-testid="button-settings-logout"
                       >
-                        Cerrar sesión
+                        Sign out
                       </Button>
                     </div>
 
