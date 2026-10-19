@@ -316,6 +316,8 @@ La app publica precios. El copy de beneficios no es coherente con el producto ni
 5. Pago: Pricing → Stripe $19 live. `OK` hasta la pasarela. No se pagó. La vuelta `/thank-you` afirma activación sin mirar el pago. `ROTO` como prueba de cobro.
 6. Resultado entregado: no hay envío, ni workflow corrido, ni documento generado. `FALTA`.
 
+Recorrido con sesión del 2026-10-18: [CRONOLOGIA-Automator.md](./CRONOLOGIA-Automator.md).
+
 ## M. Mapa de conexiones
 
 ```mermaid
